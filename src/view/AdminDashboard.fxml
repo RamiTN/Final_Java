@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="rootPane" spacing="10" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.AdminController"
+      style="-fx-background-color: #2b2b2b; -fx-padding: 20;">
+
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Button text="Back" onAction="#goToDashboard"
+                style="-fx-background-color: #636e72; -fx-text-fill: white; -fx-cursor: hand;"/>
+        <Label text="Admin Panel" style="-fx-font-size: 22; -fx-text-fill: #e0e0e0; -fx-font-weight: bold;"/>
+    </HBox>
+
+    <TabPane VBox.vgrow="ALWAYS" style="-fx-background-color: #2b2b2b;">
+        <!-- Users Tab -->
+        <Tab text="Users" closable="false">
+            <VBox spacing="10" style="-fx-padding: 10;">
+                <TableView fx:id="userTable" prefHeight="300" style="-fx-background-color: #3c3c3c;">
+                    <columns>
+                        <TableColumn text="ID" prefWidth="50">
+                            <cellValueFactory><PropertyValueFactory property="id"/></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Name" prefWidth="150">
+                            <cellValueFactory><PropertyValueFactory property="name"/></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Email" prefWidth="200">
+                            <cellValueFactory><PropertyValueFactory property="email"/></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Role" prefWidth="100">
+                            <cellValueFactory><PropertyValueFactory property="role"/></cellValueFactory>
+                        </TableColumn>
+                    </columns>
+                </TableView>
+                <Button text="Delete Selected User" onAction="#handleDeleteUser"
+                        style="-fx-background-color: #e17055; -fx-text-fill: white; -fx-cursor: hand;"/>
+                <Label fx:id="userMsg" style="-fx-text-fill: #ff6b6b;"/>
+            </VBox>
+        </Tab>
+
+        <!-- Jobs Tab -->
+        <Tab text="Jobs" closable="false">
+            <VBox spacing="10" style="-fx-padding: 10;">
+                <HBox spacing="8">
+                    <TextField fx:id="jobTitleField" promptText="Title"
+                               style="-fx-background-color: #3c3c3c; -fx-text-fill: white; -fx-prompt-text-fill: #888;"/>
+                    <TextField fx:id="jobCompanyField" promptText="Company"
+                               style="-fx-background-color: #3c3c3c; -fx-text-fill: white; -fx-prompt-text-fill: #888;"/>
+                    <TextField fx:id="jobLocationField" promptText="Location"
+                               style="-fx-background-color: #3c3c3c; -fx-text-fill: white; -fx-prompt-text-fill: #888;"/>
+                    <TextField fx:id="jobLinkField" promptText="Link"
+                               style="-fx-background-color: #3c3c3c; -fx-text-fill: white; -fx-prompt-text-fill: #888;"/>
+                </HBox>
+                <TextField fx:id="jobDescField" promptText="Description"
+                           style="-fx-background-color: #3c3c3c; -fx-text-fill: white; -fx-prompt-text-fill: #888;"/>
+                <TextField fx:id="jobReqField" promptText="Requirements (comma separated)"
+                           style="-fx-background-color: #3c3c3c; -fx-text-fill: white; -fx-prompt-text-fill: #888;"/>
+
+                <HBox spacing="8">
+                    <Button text="Add Job" onAction="#handleAddJob"
+                            style="-fx-background-color: #00b894; -fx-text-fill: white; -fx-cursor: hand;"/>
+                    <Button text="Update Job" onAction="#handleUpdateJob"
+                            style="-fx-background-color: #fdcb6e; -fx-text-fill: #2b2b2b; -fx-cursor: hand;"/>
+                    <Button text="Delete Job" onAction="#handleDeleteJob"
+                            style="-fx-background-color: #e17055; -fx-text-fill: white; -fx-cursor: hand;"/>
+                </HBox>
+
+                <TableView fx:id="adminJobTable" prefHeight="250" style="-fx-background-color: #3c3c3c;">
+                    <columns>
+                        <TableColumn text="ID" prefWidth="40">
+                            <cellValueFactory><PropertyValueFactory property="id"/></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Title" prefWidth="140">
+                            <cellValueFactory><PropertyValueFactory property="title"/></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Company" prefWidth="120">
+                            <cellValueFactory><PropertyValueFactory property="company"/></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Location" prefWidth="100">
+                            <cellValueFactory><PropertyValueFactory property="location"/></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Link" prefWidth="150">
+                            <cellValueFactory><PropertyValueFactory property="link"/></cellValueFactory>
+                        </TableColumn>
+                    </columns>
+                </TableView>
+                <Label fx:id="jobMsg" style="-fx-text-fill: #ff6b6b;"/>
+            </VBox>
+        </Tab>
+    </TabPane>
+</VBox>

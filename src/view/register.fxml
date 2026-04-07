@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="rootPane" alignment="CENTER" spacing="15" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.UserController"
+      style="-fx-background-color: #2b2b2b; -fx-padding: 50;">
+
+    <Label text="Create Account" style="-fx-font-size: 30; -fx-text-fill: #4a9eff; -fx-font-weight: bold;"/>
+
+    <VBox spacing="10" maxWidth="320" alignment="CENTER">
+        <TextField fx:id="nameField" promptText="Full Name"
+                   style="-fx-background-color: #3c3c3c; -fx-text-fill: white; -fx-prompt-text-fill: #888; -fx-padding: 10;"/>
+        <TextField fx:id="regEmailField" promptText="Email"
+                   style="-fx-background-color: #3c3c3c; -fx-text-fill: white; -fx-prompt-text-fill: #888; -fx-padding: 10;"/>
+        <PasswordField fx:id="regPasswordField" promptText="Password"
+                       style="-fx-background-color: #3c3c3c; -fx-text-fill: white; -fx-prompt-text-fill: #888; -fx-padding: 10;"/>
+        <PasswordField fx:id="confirmPasswordField" promptText="Confirm Password"
+                       style="-fx-background-color: #3c3c3c; -fx-text-fill: white; -fx-prompt-text-fill: #888; -fx-padding: 10;"/>
+        <Button text="Register" onAction="#handleRegister" maxWidth="1.7976931348623157E308"
+                style="-fx-background-color: #4a9eff; -fx-text-fill: white; -fx-font-size: 14; -fx-padding: 10; -fx-cursor: hand;"/>
+        <Label fx:id="messageLabel" style="-fx-text-fill: #ff6b6b;"/>
+        <Hyperlink text="Already have an account? Login" onAction="#goToLogin" style="-fx-text-fill: #4a9eff;"/>
+    </VBox>
+</VBox>

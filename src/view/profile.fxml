@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="rootPane" alignment="CENTER" spacing="15" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.UserController"
+      style="-fx-background-color: #2b2b2b; -fx-padding: 40;">
+
+    <Label text="My Profile" style="-fx-font-size: 28; -fx-text-fill: #e0e0e0; -fx-font-weight: bold;"/>
+
+    <VBox alignment="CENTER_LEFT" spacing="12" maxWidth="400"
+          style="-fx-background-color: #3c3c3c; -fx-padding: 30; -fx-background-radius: 10;">
+        <Label text="Name:" style="-fx-text-fill: #aaa;"/>
+        <Label fx:id="profileNameLabel" style="-fx-text-fill: white; -fx-font-size: 16;"/>
+        <Label text="Email:" style="-fx-text-fill: #aaa;"/>
+        <Label fx:id="profileEmailLabel" style="-fx-text-fill: white; -fx-font-size: 16;"/>
+        <Label text="Role:" style="-fx-text-fill: #aaa;"/>
+        <Label fx:id="profileRoleLabel" style="-fx-text-fill: #4a9eff; -fx-font-size: 16; -fx-font-weight: bold;"/>
+    </VBox>
+
+    <Button text="Back to Dashboard" onAction="#goToDashboard"
+            style="-fx-background-color: #636e72; -fx-text-fill: white; -fx-padding: 8 30; -fx-cursor: hand;"/>
+</VBox>

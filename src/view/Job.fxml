@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="rootPane" spacing="10" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.JobController"
+      style="-fx-background-color: #2b2b2b; -fx-padding: 20;">
+
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Button text="Back" onAction="#goToDashboard"
+                style="-fx-background-color: #636e72; -fx-text-fill: white; -fx-cursor: hand;"/>
+        <Label text="Available Jobs" style="-fx-font-size: 22; -fx-text-fill: #e0e0e0; -fx-font-weight: bold;"/>
+    </HBox>
+
+    <TableView fx:id="jobTable" VBox.vgrow="ALWAYS" style="-fx-background-color: #3c3c3c;">
+        <columns>
+            <TableColumn text="Title" prefWidth="150">
+                <cellValueFactory><PropertyValueFactory property="title"/></cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Company" prefWidth="130">
+                <cellValueFactory><PropertyValueFactory property="company"/></cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Location" prefWidth="120">
+                <cellValueFactory><PropertyValueFactory property="location"/></cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Description" prefWidth="200">
+                <cellValueFactory><PropertyValueFactory property="description"/></cellValueFactory>
+            </TableColumn>
+            <TableColumn text="Link" prefWidth="150">
+                <cellValueFactory><PropertyValueFactory property="link"/></cellValueFactory>
+            </TableColumn>
+        </columns>
+    </TableView>
+</VBox>
