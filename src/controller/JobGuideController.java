@@ -25,9 +25,12 @@ public class JobGuideController {
     @FXML private TextArea chatArea;
     @FXML private TextField userInput;
 
-    private String mode = "chat"; // "chat", "interview", "cvadvice"
+    private String mode = "chat";
     private List<String> interviewQuestions = new ArrayList<>();
     private int questionIndex = 0;
+
+    // Tracks whether the user is retrying the current question after feedback
+    private boolean awaitingRetry = false;
 
     @FXML
     public void initialize() {
@@ -46,9 +49,12 @@ public class JobGuideController {
         appendUser(text);
 
         if ("interview".equals(mode)) {
-            handleInterviewAnswer(text);
+            if (awaitingRetry) {
+                handleRetryAnswer(text);
+            } else {
+                handleInterviewAnswer(text);
+            }
         } else {
-            // general chat - ask AI
             appendBot("Thinking...");
             new Thread(() -> {
                 String prompt = "You are a career coach chatbot. The user says: \"" + text
@@ -66,6 +72,7 @@ public class JobGuideController {
     private void handleInterview() {
         mode = "interview";
         questionIndex = 0;
+        awaitingRetry = false;
         interviewQuestions.clear();
         interviewQuestions.add("Tell me about yourself.");
         interviewQuestions.add("What are your strengths?");
@@ -78,19 +85,24 @@ public class JobGuideController {
 
         chatArea.setText("");
         appendBot("Interview Practice Mode!\nI'll ask you common interview questions. "
-                + "Answer each one and I'll give you feedback.\n");
+                + "Answer each one and I'll give you feedback + an example of a stronger answer.\n"
+                + "You can then try again or type 'next' to move on.\n");
         askNextQuestion();
     }
 
     private void askNextQuestion() {
+        awaitingRetry = false;
         if (questionIndex < interviewQuestions.size()) {
-            appendBot("Question " + (questionIndex + 1) + ": " + interviewQuestions.get(questionIndex));
+            appendBot("Question " + (questionIndex + 1) + " of " + interviewQuestions.size()
+                    + ": " + interviewQuestions.get(questionIndex));
         } else {
-            appendBot("Great job! You completed all the questions. Type anything to continue chatting.");
+            appendBot("Great job! You completed all the questions!\n"
+                    + "You've practiced " + interviewQuestions.size() + " interview questions. Keep it up!");
             mode = "chat";
         }
     }
 
+    // Called on the FIRST attempt at a question — gives feedback + example, then waits for retry
     private void handleInterviewAnswer(String answer) {
         if (questionIndex >= interviewQuestions.size()) {
             mode = "chat";
@@ -98,14 +110,49 @@ public class JobGuideController {
         }
         String question = interviewQuestions.get(questionIndex);
         appendBot("Evaluating your answer...");
+
         new Thread(() -> {
-            String prompt = "You are an interview coach. The interview question was: \"" + question
-                    + "\". The candidate answered: \"" + answer
-                    + "\". Give brief feedback: was it good? What could be improved? Be concise (3-4 lines max).";
+            String prompt = "You are an interview coach. The interview question was: \""
+                    + question + "\"\n"
+                    + "The candidate answered: \"" + answer + "\"\n\n"
+                    + "Reply in this exact format:\n"
+                    + "FEEDBACK: (2-3 lines max — what was good and what was weak)\n"
+                    + "EXAMPLE: (write a stronger model answer they can learn from, 3-5 lines)\n"
+                    + "Be direct and encouraging.";
             String reply = AiService.askGemini(prompt);
+
             javafx.application.Platform.runLater(() -> {
                 removeLast("Evaluating your answer...");
-                appendBot("Feedback: " + reply);
+                appendBot(reply
+                        + "\n\n--- Try again with a better answer, or type 'next' to move on. ---");
+                awaitingRetry = true;
+            });
+        }).start();
+    }
+
+    // Called on the RETRY attempt — praises improvement, then moves to next question
+    private void handleRetryAnswer(String answer) {
+        if ("next".equalsIgnoreCase(answer)) {
+            questionIndex++;
+            askNextQuestion();
+            return;
+        }
+
+        String question = interviewQuestions.get(questionIndex);
+        appendBot("Checking your improved answer...");
+
+        new Thread(() -> {
+            String prompt = "You are an interview coach. The interview question was: \""
+                    + question + "\"\n"
+                    + "The candidate just gave this improved answer: \"" + answer + "\"\n\n"
+                    + "Acknowledge their improvement warmly in 1-2 lines. "
+                    + "Mention one specific thing they did well in this version. "
+                    + "Be encouraging and concise.";
+            String reply = AiService.askGemini(prompt);
+
+            javafx.application.Platform.runLater(() -> {
+                removeLast("Checking your improved answer...");
+                appendBot(reply);
                 questionIndex++;
                 askNextQuestion();
             });
@@ -125,7 +172,7 @@ public class JobGuideController {
             return;
         }
 
-        Cv cv = cvs.get(0); // use the first CV
+        Cv cv = cvs.get(0);
         appendBot("Analyzing your CV (" + cv.getFullName() + ")...");
         new Thread(() -> {
             String prompt = "You are a CV expert. Review this CV and give specific, actionable advice:\n"
@@ -170,7 +217,6 @@ public class JobGuideController {
             return;
         }
 
-        // simple matching: check if any user skill word appears in job requirements or description
         String[] skills = userSkills.split(",");
         List<Job> matched = new ArrayList<>();
         for (Job job : allJobs) {
@@ -184,7 +230,6 @@ public class JobGuideController {
         }
 
         if (matched.isEmpty()) {
-            // if no exact match, just show all jobs
             appendBot("No exact skill matches found. Here are all available jobs:");
             for (Job j : allJobs) {
                 appendBot("- " + j.getTitle() + " at " + j.getCompany()

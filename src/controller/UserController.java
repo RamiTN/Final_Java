@@ -17,27 +17,17 @@ import service.AuthService;
 public class UserController {
 
     @FXML private VBox rootPane;
-
-    // login fields
     @FXML private TextField emailField;
     @FXML private PasswordField passwordField;
-
-    // register fields
     @FXML private TextField nameField;
     @FXML private TextField regEmailField;
     @FXML private PasswordField regPasswordField;
     @FXML private PasswordField confirmPasswordField;
-
-    // dashboard fields
     @FXML private Label welcomeLabel;
     @FXML private Button adminBtn;
-
-    // profile fields
     @FXML private Label profileNameLabel;
     @FXML private Label profileEmailLabel;
     @FXML private Label profileRoleLabel;
-
-    // shared
     @FXML private Label messageLabel;
 
     private AuthService authService = new AuthService();
