@@ -27,7 +27,7 @@ public class JobController {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/view/dashboard.fxml"));
             Stage stage = (Stage) rootPane.getScene().getWindow();
-            stage.setScene(new Scene(root, 800, 600));
+            stage.getScene().setRoot(root);
         } catch (Exception e) { e.printStackTrace(); }
     }
 }

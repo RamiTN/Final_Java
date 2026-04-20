@@ -2,22 +2,55 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox fx:id="rootPane" alignment="CENTER" spacing="15" xmlns:fx="http://javafx.com/fxml"
+<VBox fx:id="rootPane" xmlns:fx="http://javafx.com/fxml"
       fx:controller="controller.UserController"
-      style="-fx-background-color: #2b2b2b; -fx-padding: 40;">
+      stylesheets="@/css/style.css"
+      prefWidth="1000" prefHeight="650"
+      styleClass="root">
 
-    <Label text="My Profile" style="-fx-font-size: 28; -fx-text-fill: #e0e0e0; -fx-font-weight: bold;"/>
+    <HBox VBox.vgrow="ALWAYS">
 
-    <VBox alignment="CENTER_LEFT" spacing="12" maxWidth="400"
-          style="-fx-background-color: #3c3c3c; -fx-padding: 30; -fx-background-radius: 10;">
-        <Label text="Name:" style="-fx-text-fill: #aaa;"/>
-        <Label fx:id="profileNameLabel" style="-fx-text-fill: white; -fx-font-size: 16;"/>
-        <Label text="Email:" style="-fx-text-fill: #aaa;"/>
-        <Label fx:id="profileEmailLabel" style="-fx-text-fill: white; -fx-font-size: 16;"/>
-        <Label text="Role:" style="-fx-text-fill: #aaa;"/>
-        <Label fx:id="profileRoleLabel" style="-fx-text-fill: #4a9eff; -fx-font-size: 16; -fx-font-weight: bold;"/>
-    </VBox>
+        <!-- SIDEBAR -->
+        <VBox styleClass="sidebar">
+            <Label text="CVBuilder" styleClass="logo"/>
+            <Button text="Dashboard" onAction="#goToDashboard" maxWidth="Infinity" styleClass="nav-btn"/>
+            <Button text="My CVs" onAction="#goToCv" maxWidth="Infinity" styleClass="nav-btn"/>
+            <Button text="Profile" onAction="#goToProfile" maxWidth="Infinity" styleClass="nav-btn, active"/>
+            <Button text="Jobs" onAction="#goToJobs" maxWidth="Infinity" styleClass="nav-btn"/>
+            <Button text="Job Guide" onAction="#goToJobGuide" maxWidth="Infinity" styleClass="nav-btn"/>
+            <Button fx:id="adminBtn" text="Admin Panel" onAction="#goToAdmin" maxWidth="Infinity"
+                    styleClass="nav-btn" visible="false" managed="false"/>
+            <Region VBox.vgrow="ALWAYS"/>
+            <Separator/>
+            <Button text="Sign out" onAction="#handleLogout" maxWidth="Infinity" styleClass="logout-btn"/>
+        </VBox>
 
-    <Button text="Back to Dashboard" onAction="#goToDashboard"
-            style="-fx-background-color: #636e72; -fx-text-fill: white; -fx-padding: 8 30; -fx-cursor: hand;"/>
+        <!-- MAIN CONTENT -->
+        <VBox HBox.hgrow="ALWAYS" styleClass="main" alignment="CENTER">
+
+            <Label text="My Profile" styleClass="page-title"/>
+
+            <VBox styleClass="profile-card" alignment="CENTER_LEFT" spacing="4">
+
+                <Label text="NAME" styleClass="profile-field-label"/>
+                <Label fx:id="profileNameLabel" styleClass="profile-field-value"/>
+
+                <Separator/>
+
+                <Label text="EMAIL" styleClass="profile-field-label"/>
+                <Label fx:id="profileEmailLabel" styleClass="profile-field-value"/>
+
+                <Separator/>
+
+                <Label text="ROLE" styleClass="profile-field-label"/>
+                <Label fx:id="profileRoleLabel" styleClass="profile-role-badge"/>
+
+            </VBox>
+
+            <Button text="Back to Dashboard" onAction="#goToDashboard" styleClass="ghost-btn"/>
+
+        </VBox>
+
+    </HBox>
+
 </VBox>

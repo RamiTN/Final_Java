@@ -2,59 +2,199 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox fx:id="rootPane" spacing="10" xmlns:fx="http://javafx.com/fxml"
+<VBox fx:id="rootPane" spacing="0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="controller.CVController"
-      style="-fx-background-color: #2b2b2b; -fx-padding: 20;">
+      stylesheets="@/css/style.css"
+      prefWidth="1100" prefHeight="720"
+      styleClass="root">
 
-    <HBox alignment="CENTER_LEFT" spacing="10">
-        <Button text="Back" onAction="#goToDashboard"
-                style="-fx-background-color: #636e72; -fx-text-fill: white; -fx-cursor: hand;"/>
-        <Label text="My CVs" style="-fx-font-size: 22; -fx-text-fill: #e0e0e0; -fx-font-weight: bold;"/>
-        <Region HBox.hgrow="ALWAYS"/>
-        <Label text="Select CV:" style="-fx-text-fill: #aaa;"/>
-        <ComboBox fx:id="cvCombo" promptText="-- New CV --" onAction="#handleSelectCv"
-                  style="-fx-background-color: #3c3c3c;"/>
-    </HBox>
+    <HBox VBox.vgrow="ALWAYS">
 
-    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background: #2b2b2b; -fx-border-color: transparent;">
-        <VBox spacing="8" style="-fx-padding: 10;">
-            <TextField fx:id="fullNameField" promptText="Full Name"
-                       style="-fx-background-color: #3c3c3c; -fx-text-fill: white; -fx-prompt-text-fill: #888; -fx-padding: 8;"/>
-            <TextField fx:id="cvEmailField" promptText="Email"
-                       style="-fx-background-color: #3c3c3c; -fx-text-fill: white; -fx-prompt-text-fill: #888; -fx-padding: 8;"/>
-            <TextField fx:id="phoneField" promptText="Phone"
-                       style="-fx-background-color: #3c3c3c; -fx-text-fill: white; -fx-prompt-text-fill: #888; -fx-padding: 8;"/>
-            <TextField fx:id="addressField" promptText="Address"
-                       style="-fx-background-color: #3c3c3c; -fx-text-fill: white; -fx-prompt-text-fill: #888; -fx-padding: 8;"/>
-            <TextArea fx:id="objectiveField" promptText="Career Objective" prefRowCount="2" wrapText="true"
-                      style="-fx-background-color: #3c3c3c; -fx-text-fill: white; -fx-prompt-text-fill: #888;"/>
-            <TextArea fx:id="educationField" promptText="Education" prefRowCount="2" wrapText="true"
-                      style="-fx-background-color: #3c3c3c; -fx-text-fill: white; -fx-prompt-text-fill: #888;"/>
-            <TextArea fx:id="experienceField" promptText="Experience" prefRowCount="2" wrapText="true"
-                      style="-fx-background-color: #3c3c3c; -fx-text-fill: white; -fx-prompt-text-fill: #888;"/>
-            <TextArea fx:id="skillsField" promptText="Skills (comma separated)" prefRowCount="2" wrapText="true"
-                      style="-fx-background-color: #3c3c3c; -fx-text-fill: white; -fx-prompt-text-fill: #888;"/>
-            <TextArea fx:id="languagesField" promptText="Languages" prefRowCount="2" wrapText="true"
-                      style="-fx-background-color: #3c3c3c; -fx-text-fill: white; -fx-prompt-text-fill: #888;"/>
+        <!-- ═══════════════════════════════════ SIDEBAR -->
+        <VBox styleClass="sidebar">
 
-            <HBox spacing="10" alignment="CENTER_LEFT">
-                <Button text="Create" onAction="#handleCreate"
-                        style="-fx-background-color: #00b894; -fx-text-fill: white; -fx-cursor: hand;"/>
-                <Button text="Update" onAction="#handleUpdate"
-                        style="-fx-background-color: #fdcb6e; -fx-text-fill: #2b2b2b; -fx-cursor: hand;"/>
-                <Button text="Delete" onAction="#handleDelete"
-                        style="-fx-background-color: #e17055; -fx-text-fill: white; -fx-cursor: hand;"/>
-                <Button text="Download PDF" onAction="#handleDownload"
-                        style="-fx-background-color: #6c5ce7; -fx-text-fill: white; -fx-cursor: hand;"/>
-                <Button text="AI Advice" onAction="#handleAiAdvice"
-                        style="-fx-background-color: #0984e3; -fx-text-fill: white; -fx-cursor: hand;"/>
+            <Label text="CVBuilder" styleClass="logo"/>
+
+            <Button text="⌂  Dashboard" onAction="#goToDashboard"
+                    maxWidth="Infinity" styleClass="nav-btn"/>
+            <Button text="☰  My CVs"
+                    maxWidth="Infinity" styleClass="nav-btn, active"/>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+        </VBox>
+
+        <!-- ═══════════════════════════════════ MAIN -->
+        <VBox HBox.hgrow="ALWAYS" styleClass="main" spacing="0">
+
+            <!-- TOP BAR -->
+            <HBox alignment="CENTER_LEFT" spacing="12" styleClass="top-bar">
+                <VBox HBox.hgrow="ALWAYS" spacing="2">
+                    <Label text="My CVs"                      styleClass="page-title"/>
+                    <Label text="Create and manage your CVs"  styleClass="subtitle"/>
+                </VBox>
+                <Label text="Select CV:" styleClass="subtitle"/>
+                <ComboBox fx:id="cvCombo" promptText="— New CV —"
+                          onAction="#handleSelectCv" prefWidth="180"
+                          styleClass="combo-box"/>
             </HBox>
 
-            <Label fx:id="messageLabel" style="-fx-text-fill: #ff6b6b;"/>
-            <Label text="AI Advice:" style="-fx-text-fill: #aaa;"/>
-            <TextArea fx:id="aiAdviceArea" editable="false" prefRowCount="4" wrapText="true"
-                      promptText="AI suggestions will appear here..."
-                      style="-fx-background-color: #3c3c3c; -fx-text-fill: #a0e6a0; -fx-prompt-text-fill: #666;"/>
+            <!-- SCROLLABLE FORM -->
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                        styleClass="scroll-pane" hbarPolicy="NEVER">
+                <VBox spacing="16" styleClass="main">
+
+                    <!-- ┌─ PERSONAL INFORMATION ───────────────────┐ -->
+                    <VBox styleClass="panel" spacing="14">
+                        <Label text="Personal Information" styleClass="panel-title"/>
+                        <Separator styleClass="separator"/>
+
+                        <HBox spacing="12">
+                            <VBox HBox.hgrow="ALWAYS" spacing="4">
+                                <Label text="FULL NAME" styleClass="form-label"/>
+                                <TextField fx:id="fullNameField"
+                                           promptText="e.g. Yassine Ben Ali"
+                                           styleClass="form-field"/>
+                            </VBox>
+                            <VBox HBox.hgrow="ALWAYS" spacing="4">
+                                <Label text="EMAIL ADDRESS" styleClass="form-label"/>
+                                <TextField fx:id="cvEmailField"
+                                           promptText="e.g. yassine@email.com"
+                                           styleClass="form-field"/>
+                            </VBox>
+                        </HBox>
+
+                        <HBox spacing="12">
+                            <VBox HBox.hgrow="ALWAYS" spacing="4">
+                                <Label text="PHONE NUMBER" styleClass="form-label"/>
+                                <TextField fx:id="phoneField"
+                                           promptText="e.g. +216 55 123 456"
+                                           styleClass="form-field"/>
+                            </VBox>
+                            <VBox HBox.hgrow="ALWAYS" spacing="4">
+                                <Label text="ADDRESS" styleClass="form-label"/>
+                                <TextField fx:id="addressField"
+                                           promptText="e.g. Tunis, Tunisia"
+                                           styleClass="form-field"/>
+                            </VBox>
+                        </HBox>
+
+                        <VBox spacing="4">
+                            <Label text="CAREER OBJECTIVE" styleClass="form-label"/>
+                            <TextArea fx:id="objectiveField"
+                                      promptText="A brief summary of your professional goals..."
+                                      prefRowCount="3" wrapText="true"
+                                      styleClass="form-area"/>
+                        </VBox>
+                    </VBox>
+                    <!-- └──────────────────────────────────────────┘ -->
+
+                    <!-- ┌─ FORMATION ACADÉMIQUE ───────────────────┐ -->
+                    <VBox styleClass="panel" spacing="12">
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <VBox HBox.hgrow="ALWAYS" spacing="2">
+                                <Label text="Formation Académique" styleClass="panel-title"/>
+                                <Label text="Add your degrees and diplomas" styleClass="subtitle"/>
+                            </VBox>
+                            <Button text="+ Add Entry" onAction="#handleAddEducation"
+                                    styleClass="action-btn"/>
+                        </HBox>
+                        <Separator styleClass="separator"/>
+                        <VBox fx:id="educationContainer" spacing="10"/>
+                    </VBox>
+                    <!-- └──────────────────────────────────────────┘ -->
+
+                    <!-- ┌─ PROFESSIONAL EXPERIENCE ────────────────┐ -->
+                    <VBox styleClass="panel" spacing="12">
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <VBox HBox.hgrow="ALWAYS" spacing="2">
+                                <Label text="Professional Experience" styleClass="panel-title"/>
+                                <Label text="Add your work history" styleClass="subtitle"/>
+                            </VBox>
+                            <Button text="+ Add Entry" onAction="#handleAddExperience"
+                                    styleClass="action-btn"/>
+                        </HBox>
+                        <Separator styleClass="separator"/>
+                        <VBox fx:id="experienceContainer" spacing="10"/>
+                    </VBox>
+                    <!-- └──────────────────────────────────────────┘ -->
+
+                    <!-- ┌─ SKILLS ─────────────────────────────────┐ -->
+                    <VBox styleClass="panel" spacing="12">
+                        <VBox spacing="2">
+                            <Label text="Skills" styleClass="panel-title"/>
+                            <Label text="Type a skill and press Enter or click Add"
+                                   styleClass="subtitle"/>
+                        </VBox>
+                        <Separator styleClass="separator"/>
+                        <FlowPane fx:id="skillTagsPane" hgap="8" vgap="8"/>
+                        <HBox spacing="8" alignment="CENTER_LEFT">
+                            <TextField fx:id="skillInputField"
+                                       promptText="e.g. Java, JavaFX, SQL..."
+                                       HBox.hgrow="ALWAYS" styleClass="form-field"
+                                       onAction="#handleAddSkill"/>
+                            <Button text="Add" onAction="#handleAddSkill"
+                                    styleClass="small-btn"/>
+                        </HBox>
+                    </VBox>
+                    <!-- └──────────────────────────────────────────┘ -->
+
+                    <!-- ┌─ LANGUAGES ──────────────────────────────┐ -->
+                    <VBox styleClass="panel" spacing="12">
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <VBox HBox.hgrow="ALWAYS" spacing="2">
+                                <Label text="Languages" styleClass="panel-title"/>
+                                <Label text="Select language and proficiency level"
+                                       styleClass="subtitle"/>
+                            </VBox>
+                            <Button text="+ Add Language" onAction="#handleAddLanguage"
+                                    styleClass="action-btn"/>
+                        </HBox>
+                        <Separator styleClass="separator"/>
+                        <VBox fx:id="languagesContainer" spacing="8"/>
+                    </VBox>
+                    <!-- └──────────────────────────────────────────┘ -->
+
+                    <!-- ┌─ ACTIONS ────────────────────────────────┐ -->
+                    <VBox styleClass="panel" spacing="12">
+                        <Label text="Actions" styleClass="panel-title"/>
+                        <Separator styleClass="separator"/>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Button text="✔  Create"       onAction="#handleCreate"
+                                    styleClass="success-btn" prefWidth="110"/>
+                            <Button text="↻  Update"       onAction="#handleUpdate"
+                                    styleClass="warning-btn" prefWidth="110"/>
+                            <Button text="✖  Delete"       onAction="#handleDelete"
+                                    styleClass="danger-btn"  prefWidth="110"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Button text="⬇  Download PDF" onAction="#handleDownload"
+                                    styleClass="accent-btn"  prefWidth="145"/>
+                            <Button text="✦  AI Advice"    onAction="#handleAiAdvice"
+                                    styleClass="info-btn"    prefWidth="120"/>
+                        </HBox>
+                        <Label fx:id="messageLabel" styleClass="message-label"/>
+                    </VBox>
+                    <!-- └──────────────────────────────────────────┘ -->
+
+                    <!-- ┌─ AI ADVICE OUTPUT ───────────────────────┐ -->
+                    <VBox styleClass="panel" spacing="12">
+                        <HBox alignment="CENTER_LEFT" spacing="8">
+                            <Label text="✦" styleClass="stat-icon"/>
+                            <VBox spacing="2">
+                                <Label text="AI Advice"         styleClass="panel-title"/>
+                                <Label text="Powered by Gemini" styleClass="subtitle"/>
+                            </VBox>
+                        </HBox>
+                        <Separator styleClass="separator"/>
+                        <TextArea fx:id="aiAdviceArea" editable="false"
+                                  prefRowCount="6" wrapText="true"
+                                  promptText="Click 'AI Advice' to receive personalised suggestions..."
+                                  styleClass="chat-area"/>
+                    </VBox>
+                    <!-- └──────────────────────────────────────────┘ -->
+
+                </VBox>
+            </ScrollPane>
         </VBox>
-    </ScrollPane>
+    </HBox>
 </VBox>

@@ -2,34 +2,53 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox fx:id="rootPane" spacing="10" xmlns:fx="http://javafx.com/fxml"
+<VBox fx:id="rootPane" spacing="0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="controller.JobGuideController"
-      style="-fx-background-color: #2b2b2b; -fx-padding: 20;">
+      stylesheets="@/css/style.css"
+      prefWidth="1000" prefHeight="650"
+      styleClass="root">
 
-    <HBox alignment="CENTER_LEFT" spacing="10">
-        <Button text="Back" onAction="#goToDashboard"
-                style="-fx-background-color: #636e72; -fx-text-fill: white; -fx-cursor: hand;"/>
-        <Label text="Job Guide - AI Assistant" style="-fx-font-size: 22; -fx-text-fill: #fdcb6e; -fx-font-weight: bold;"/>
+    <HBox VBox.vgrow="ALWAYS">
+
+        <!-- SIDEBAR -->
+        <VBox styleClass="sidebar">
+            <Label text="CVBuilder" styleClass="logo"/>
+            <Button text="Dashboard" onAction="#goToDashboard" maxWidth="Infinity" styleClass="nav-btn"/>
+            <Button text="Job Guide" maxWidth="Infinity" styleClass="nav-btn, active"/>
+            <Region VBox.vgrow="ALWAYS"/>
+        </VBox>
+
+        <!-- MAIN CONTENT -->
+        <VBox HBox.hgrow="ALWAYS" styleClass="main" spacing="16">
+
+            <!-- HEADER -->
+            <HBox alignment="CENTER_LEFT" spacing="12" styleClass="top-bar">
+                <Label text="Job Guide — AI Assistant" styleClass="page-title" HBox.hgrow="ALWAYS"/>
+            </HBox>
+
+            <!-- MODE BUTTONS -->
+            <HBox spacing="10">
+                <Button text="Interview Practice" onAction="#handleInterview" styleClass="accent-btn"/>
+                <Button text="CV Advice" onAction="#handleCvAdvice" styleClass="info-btn"/>
+                <Button text="Matching Jobs" onAction="#handleMatchingJobs" styleClass="success-btn"/>
+            </HBox>
+
+            <!-- CHAT AREA -->
+            <VBox VBox.vgrow="ALWAYS" styleClass="panel" spacing="12">
+
+                <TextArea fx:id="chatArea" editable="false" wrapText="true" VBox.vgrow="ALWAYS"
+                          promptText="Chat will appear here..." styleClass="chat-area"/>
+
+                <HBox spacing="10">
+                    <TextField fx:id="userInput" promptText="Type your message..." HBox.hgrow="ALWAYS"
+                               onAction="#handleSend" styleClass="chat-input"/>
+                    <Button text="Send" onAction="#handleSend" styleClass="chat-send-btn"/>
+                </HBox>
+
+            </VBox>
+
+        </VBox>
+
     </HBox>
 
-    <HBox spacing="8" alignment="CENTER_LEFT">
-        <Button text="Interview Practice" onAction="#handleInterview"
-                style="-fx-background-color: #6c5ce7; -fx-text-fill: white; -fx-cursor: hand;"/>
-        <Button text="CV Advice" onAction="#handleCvAdvice"
-                style="-fx-background-color: #0984e3; -fx-text-fill: white; -fx-cursor: hand;"/>
-        <Button text="Matching Jobs" onAction="#handleMatchingJobs"
-                style="-fx-background-color: #00b894; -fx-text-fill: white; -fx-cursor: hand;"/>
-    </HBox>
-
-    <TextArea fx:id="chatArea" editable="false" wrapText="true" VBox.vgrow="ALWAYS"
-              promptText="Chat will appear here..."
-              style="-fx-background-color: #1e1e1e; -fx-text-fill: #e0e0e0; -fx-font-size: 13;"/>
-
-    <HBox spacing="8">
-        <TextField fx:id="userInput" promptText="Type your message..." HBox.hgrow="ALWAYS"
-                   onAction="#handleSend"
-                   style="-fx-background-color: #3c3c3c; -fx-text-fill: white; -fx-prompt-text-fill: #888; -fx-padding: 10;"/>
-        <Button text="Send" onAction="#handleSend"
-                style="-fx-background-color: #4a9eff; -fx-text-fill: white; -fx-padding: 10 25; -fx-cursor: hand;"/>
-    </HBox>
 </VBox>

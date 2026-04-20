@@ -10,9 +10,10 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         DatabaseConnection.initializeDatabase();
-        Parent root = FXMLLoader.load(getClass().getResource("/view/login.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/view/landing.fxml"));
         primaryStage.setTitle("CV Creator");
         primaryStage.setScene(new Scene(root, 800, 600));
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 

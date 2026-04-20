@@ -3,33 +3,56 @@
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.*?>
 
-<VBox fx:id="rootPane" spacing="10" xmlns:fx="http://javafx.com/fxml"
+<VBox fx:id="rootPane" spacing="0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="controller.JobController"
-      style="-fx-background-color: #2b2b2b; -fx-padding: 20;">
+      stylesheets="@/css/style.css"
+      prefWidth="1000" prefHeight="650"
+      styleClass="root">
 
-    <HBox alignment="CENTER_LEFT" spacing="10">
-        <Button text="Back" onAction="#goToDashboard"
-                style="-fx-background-color: #636e72; -fx-text-fill: white; -fx-cursor: hand;"/>
-        <Label text="Available Jobs" style="-fx-font-size: 22; -fx-text-fill: #e0e0e0; -fx-font-weight: bold;"/>
+    <HBox VBox.vgrow="ALWAYS">
+
+        <!-- SIDEBAR -->
+        <VBox styleClass="sidebar">
+            <Label text="CVBuilder" styleClass="logo"/>
+            <Button text="Dashboard" onAction="#goToDashboard" maxWidth="Infinity" styleClass="nav-btn"/>
+            <Button text="Jobs" maxWidth="Infinity" styleClass="nav-btn, active"/>
+            <Region VBox.vgrow="ALWAYS"/>
+        </VBox>
+
+        <!-- MAIN CONTENT -->
+        <VBox HBox.hgrow="ALWAYS" styleClass="main" spacing="16">
+
+            <!-- HEADER -->
+            <HBox alignment="CENTER_LEFT" spacing="12" styleClass="top-bar">
+                <Label text="Available Jobs" styleClass="page-title" HBox.hgrow="ALWAYS"/>
+                <Button text="Back to Dashboard" onAction="#goToDashboard" styleClass="ghost-btn"/>
+            </HBox>
+
+            <!-- TABLE -->
+            <VBox VBox.vgrow="ALWAYS" styleClass="panel">
+                <TableView fx:id="jobTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn text="Title" prefWidth="160">
+                            <cellValueFactory><PropertyValueFactory property="title"/></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Company" prefWidth="140">
+                            <cellValueFactory><PropertyValueFactory property="company"/></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Location" prefWidth="130">
+                            <cellValueFactory><PropertyValueFactory property="location"/></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Description" prefWidth="200">
+                            <cellValueFactory><PropertyValueFactory property="description"/></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn text="Link" prefWidth="150">
+                            <cellValueFactory><PropertyValueFactory property="link"/></cellValueFactory>
+                        </TableColumn>
+                    </columns>
+                </TableView>
+            </VBox>
+
+        </VBox>
+
     </HBox>
 
-    <TableView fx:id="jobTable" VBox.vgrow="ALWAYS" style="-fx-background-color: #3c3c3c;">
-        <columns>
-            <TableColumn text="Title" prefWidth="150">
-                <cellValueFactory><PropertyValueFactory property="title"/></cellValueFactory>
-            </TableColumn>
-            <TableColumn text="Company" prefWidth="130">
-                <cellValueFactory><PropertyValueFactory property="company"/></cellValueFactory>
-            </TableColumn>
-            <TableColumn text="Location" prefWidth="120">
-                <cellValueFactory><PropertyValueFactory property="location"/></cellValueFactory>
-            </TableColumn>
-            <TableColumn text="Description" prefWidth="200">
-                <cellValueFactory><PropertyValueFactory property="description"/></cellValueFactory>
-            </TableColumn>
-            <TableColumn text="Link" prefWidth="150">
-                <cellValueFactory><PropertyValueFactory property="link"/></cellValueFactory>
-            </TableColumn>
-        </columns>
-    </TableView>
 </VBox>
