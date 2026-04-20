@@ -143,10 +143,13 @@ public class LandingController {
     }
 
     @FXML
-    private void scrollToFeatures() {
-        if (featuresSection != null) {
-            featuresSection.requestFocus();
-        }
+    private void goToFeatures() {
+        loadScene("/view/features.fxml");
+    }
+
+    @FXML
+    private void goToHowItWorks() {
+        loadScene("/view/how_it_works.fxml");
     }
 
     private void loadScene(String fxml) {

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox fx:id="rootPane" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.InfoController"
+      stylesheets="@/css/style.css"
+      prefWidth="1200" prefHeight="800"
+      styleClass="landing-root">
+
+    <!-- ═══════════ NAVIGATION BAR ═══════════ -->
+    <HBox alignment="CENTER_LEFT" spacing="16" styleClass="landing-navbar">
+        <padding><Insets top="0" right="48" bottom="0" left="48"/></padding>
+        <Label text="⚡ CVBuilder" styleClass="landing-logo"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <HBox spacing="28" alignment="CENTER_RIGHT" styleClass="landing-nav-links">
+            <Label text="← Back to Home" styleClass="landing-nav-link" onMouseClicked="#goToLanding"/>
+        </HBox>
+        <HBox spacing="12" alignment="CENTER_RIGHT">
+            <Button text="Sign In" onAction="#goToLogin" styleClass="landing-signin-btn"/>
+            <Button text="Get Started" onAction="#goToRegister" styleClass="landing-cta-btn"/>
+        </HBox>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent; -fx-border-color: transparent;">
+        <VBox alignment="CENTER" spacing="40" styleClass="landing-content">
+            <padding><Insets top="80" right="60" bottom="80" left="60"/></padding>
+
+            <Label text="Features" styleClass="landing-section-title"/>
+            <Label text="Discover everything CVBuilder can do for you" styleClass="landing-section-subtitle"/>
+
+            <VBox spacing="24" alignment="CENTER" maxWidth="800">
+                <HBox spacing="24">
+                    <VBox styleClass="landing-feature-card" HBox.hgrow="ALWAYS">
+                        <Label text="🤖" styleClass="landing-feature-icon"/>
+                        <Label text="AI-Powered CV Advice" styleClass="landing-feature-title"/>
+                        <Label text="Get personalized suggestions from our AI to improve each section of your CV — from crafting the perfect objective to highlighting your best skills and experiences." styleClass="landing-feature-desc" wrapText="true"/>
+                    </VBox>
+                    <VBox styleClass="landing-feature-card" HBox.hgrow="ALWAYS">
+                        <Label text="📄" styleClass="landing-feature-icon"/>
+                        <Label text="CV Builder &amp; PDF Export" styleClass="landing-feature-title"/>
+                        <Label text="Create unlimited CVs with a structured, intuitive form. Enter your personal info, education, experience, skills, and languages, then export as a professional, ATS-friendly PDF." styleClass="landing-feature-desc" wrapText="true"/>
+                    </VBox>
+                </HBox>
+                <HBox spacing="24">
+                    <VBox styleClass="landing-feature-card" HBox.hgrow="ALWAYS">
+                        <Label text="🎯" styleClass="landing-feature-icon"/>
+                        <Label text="Smart Job Matching" styleClass="landing-feature-title"/>
+                        <Label text="Browse our available job offers. Enter your skills into your CV, and our algorithm will automatically match your unique profile to the best opportunities available." styleClass="landing-feature-desc" wrapText="true"/>
+                    </VBox>
+                    <VBox styleClass="landing-feature-card" HBox.hgrow="ALWAYS">
+                        <Label text="💬" styleClass="landing-feature-icon"/>
+                        <Label text="Interview Practice" styleClass="landing-feature-title"/>
+                        <Label text="Practice common behavioral and technical interview questions with the AI JobGuide chatbot. Receive real-time feedback and review model answers to sharpen your skills." styleClass="landing-feature-desc" wrapText="true"/>
+                    </VBox>
+                </HBox>
+                <HBox spacing="24">
+                    <VBox styleClass="landing-feature-card" HBox.hgrow="ALWAYS">
+                        <Label text="📊" styleClass="landing-feature-icon"/>
+                        <Label text="Admin Dashboard" styleClass="landing-feature-title"/>
+                        <Label text="Admins have access to a full management panel. Handle user &amp; job creation, view role distribution pie charts, analyze company statistics, and securely export data." styleClass="landing-feature-desc" wrapText="true"/>
+                    </VBox>
+                    <VBox styleClass="landing-feature-card" HBox.hgrow="ALWAYS">
+                        <Label text="👤" styleClass="landing-feature-icon"/>
+                        <Label text="User Roles &amp; Profiles" styleClass="landing-feature-title"/>
+                        <Label text="Secure authentication with distinct User and Admin roles. View your personalized profile dashboard, track your created CVs, and manage your entire career journey." styleClass="landing-feature-desc" wrapText="true"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <!-- FOOTER -->
+            <HBox alignment="CENTER" spacing="32" styleClass="landing-footer">
+                <padding><Insets top="60" right="48" bottom="20" left="48"/></padding>
+                <Label text="© 2026 CVBuilder — Built with JavaFX" styleClass="landing-footer-text"/>
+                <Region HBox.hgrow="ALWAYS"/>
+            </HBox>
+
+        </VBox>
+    </ScrollPane>
+</VBox>

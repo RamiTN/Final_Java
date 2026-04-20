@@ -18,8 +18,8 @@
         <Region HBox.hgrow="ALWAYS"/>
 
         <HBox spacing="28" alignment="CENTER_RIGHT" styleClass="landing-nav-links">
-            <Label text="Features" styleClass="landing-nav-link" onMouseClicked="#scrollToFeatures"/>
-            <Label text="How It Works" styleClass="landing-nav-link"/>
+            <Label text="Features" styleClass="landing-nav-link" onMouseClicked="#goToFeatures"/>
+            <Label text="How It Works" styleClass="landing-nav-link" onMouseClicked="#goToHowItWorks"/>
         </HBox>
 
         <HBox spacing="12" alignment="CENTER_RIGHT">

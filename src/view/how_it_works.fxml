@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox fx:id="rootPane" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.InfoController"
+      stylesheets="@/css/style.css"
+      prefWidth="1200" prefHeight="800"
+      styleClass="landing-root">
+
+    <!-- ═══════════ NAVIGATION BAR ═══════════ -->
+    <HBox alignment="CENTER_LEFT" spacing="16" styleClass="landing-navbar">
+        <padding><Insets top="0" right="48" bottom="0" left="48"/></padding>
+        <Label text="⚡ CVBuilder" styleClass="landing-logo"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <HBox spacing="28" alignment="CENTER_RIGHT" styleClass="landing-nav-links">
+            <Label text="← Back to Home" styleClass="landing-nav-link" onMouseClicked="#goToLanding"/>
+        </HBox>
+        <HBox spacing="12" alignment="CENTER_RIGHT">
+            <Button text="Sign In" onAction="#goToLogin" styleClass="landing-signin-btn"/>
+            <Button text="Get Started" onAction="#goToRegister" styleClass="landing-cta-btn"/>
+        </HBox>
+    </HBox>
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent; -fx-border-color: transparent;">
+        <VBox alignment="CENTER" spacing="40" styleClass="landing-content">
+            <padding><Insets top="80" right="60" bottom="80" left="60"/></padding>
+
+            <Label text="How It Works" styleClass="landing-section-title"/>
+            <Label text="Three simple steps to launch your career" styleClass="landing-section-subtitle"/>
+
+            <VBox spacing="32" alignment="CENTER" maxWidth="800">
+                <HBox alignment="CENTER_LEFT" spacing="24" styleClass="landing-feature-card">
+                    <StackPane styleClass="landing-step-circle">
+                        <Label text="1" styleClass="landing-step-number"/>
+                    </StackPane>
+                    <VBox spacing="8" HBox.hgrow="ALWAYS">
+                        <Label text="Register &amp; Setup Your Profile" styleClass="landing-feature-title"/>
+                        <Label text="Start by creating a free account. You only need to provide your name, a valid email address, and a secure password. Once logged in, you'll be taken to your personalized dashboard where you can track all your career tools." styleClass="landing-feature-desc" wrapText="true"/>
+                    </VBox>
+                </HBox>
+
+                <HBox alignment="CENTER_LEFT" spacing="24" styleClass="landing-feature-card">
+                    <StackPane styleClass="landing-step-circle">
+                        <Label text="2" styleClass="landing-step-number"/>
+                    </StackPane>
+                    <VBox spacing="8" HBox.hgrow="ALWAYS">
+                        <Label text="Build &amp; Optimize Your CV" styleClass="landing-feature-title"/>
+                        <Label text="Head over to the CV generation module. Fill out your details in structured fields (Personal info, Education, Experience, Skills, and Languages). If you are stuck, ask the AI assistant to review your CV data and provide actionable advice to improve it. Once satisfied, export it as a high-quality PDF ready for employers." styleClass="landing-feature-desc" wrapText="true"/>
+                    </VBox>
+                </HBox>
+
+                <HBox alignment="CENTER_LEFT" spacing="24" styleClass="landing-feature-card">
+                    <StackPane styleClass="landing-step-circle">
+                        <Label text="3" styleClass="landing-step-number"/>
+                    </StackPane>
+                    <VBox spacing="8" HBox.hgrow="ALWAYS">
+                        <Label text="Apply to Jobs &amp; Practice" styleClass="landing-feature-title"/>
+                        <Label text="Navigate to the Job offers section to browse available roles. With your skills saved in your CV, the platform can automatically highlight matching positions. When you're ready to apply, you can use the AI JobGuide chatbot to practice behavioral and technical interview questions, receiving real-time suggestions to perfect your answers." styleClass="landing-feature-desc" wrapText="true"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <!-- FOOTER -->
+            <HBox alignment="CENTER" spacing="32" styleClass="landing-footer">
+                <padding><Insets top="60" right="48" bottom="20" left="48"/></padding>
+                <Label text="© 2026 CVBuilder — Built with JavaFX" styleClass="landing-footer-text"/>
+                <Region HBox.hgrow="ALWAYS"/>
+            </HBox>
+
+        </VBox>
+    </ScrollPane>
+</VBox>
