@@ -566,6 +566,110 @@
     -fx-font-size: 12;
 }
 
+/* ---------- DARK DIALOGS (Alerts / Popups) ---------- */
+.dialog-pane {
+    -fx-background-color: #0e1225;
+    -fx-border-color: rgba(74,124,255,0.2);
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: rgba(74,124,255,0.08);
+    -fx-padding: 16;
+}
+
+.dialog-pane .header-panel .label {
+    -fx-text-fill: white;
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+}
+
+.dialog-pane .content.label {
+    -fx-text-fill: rgba(255,255,255,0.8);
+    -fx-font-size: 13;
+    -fx-padding: 12;
+}
+
+.dialog-pane .label {
+    -fx-text-fill: rgba(255,255,255,0.85);
+}
+
+.dialog-pane .button-bar {
+    -fx-background-color: rgba(255,255,255,0.03);
+    -fx-padding: 10 16;
+}
+
+.dialog-pane .button-bar .button {
+    -fx-background-color: rgba(74,124,255,0.15);
+    -fx-text-fill: #7ca3ff;
+    -fx-background-radius: 8;
+    -fx-padding: 8 20;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+}
+
+.dialog-pane .button-bar .button:hover {
+    -fx-background-color: rgba(74,124,255,0.25);
+}
+
+.dialog-pane .button-bar .button:default {
+    -fx-background-color: linear-gradient(to right, #4a7cff, #7c3aed);
+    -fx-text-fill: white;
+}
+
+.dialog-pane .button-bar .button:default:hover {
+    -fx-background-color: linear-gradient(to right, #5a8aff, #8c4af0);
+}
+
+.dialog-pane .button-bar .button:cancel {
+    -fx-background-color: rgba(231,76,60,0.15);
+    -fx-text-fill: #ff6b6b;
+}
+
+.dialog-pane .button-bar .button:cancel:hover {
+    -fx-background-color: rgba(231,76,60,0.25);
+}
+
+.dialog-pane .text-area {
+    -fx-background-color: rgba(255,255,255,0.06);
+    -fx-text-fill: rgba(255,255,255,0.85);
+    -fx-border-color: rgba(255,255,255,0.08);
+    -fx-border-radius: 8;
+}
+
+.dialog-pane .text-area .content {
+    -fx-background-color: rgba(255,255,255,0.04);
+}
+
+.dialog-pane .text-field {
+    -fx-background-color: rgba(255,255,255,0.06);
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: rgba(255,255,255,0.3);
+    -fx-border-color: rgba(255,255,255,0.08);
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 8 12;
+}
+
+.dialog-pane .text-field:focused {
+    -fx-border-color: #4a7cff;
+    -fx-background-color: rgba(74,124,255,0.06);
+}
+
+.dialog-pane .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.dialog-pane .scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Graphic icon area */
+.dialog-pane .graphic-container {
+    -fx-padding: 10;
+}
+
 /* ---------- AUTH SCREENS (Login / Register) ---------- */
 .auth-bg {
     -fx-background-color: linear-gradient(to bottom right, #0b0f1a, #111833);

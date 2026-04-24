@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.*?>
 
 <VBox fx:id="rootPane" spacing="0" xmlns:fx="http://javafx.com/fxml"
@@ -25,31 +24,24 @@
             <!-- HEADER -->
             <HBox alignment="CENTER_LEFT" spacing="12" styleClass="top-bar">
                 <Label text="Available Jobs" styleClass="page-title" HBox.hgrow="ALWAYS"/>
-                <Button text="Back to Dashboard" onAction="#goToDashboard" styleClass="ghost-btn"/>
+
+                <!-- FILTER -->
+                <Label text="Filter:" styleClass="subtitle"/>
+                <ComboBox fx:id="filterCombo" promptText="All" prefWidth="140"
+                          onAction="#handleFilter" styleClass="combo-box"/>
+
+                <!-- CV SELECTOR -->
+                <Label text="Apply with:" styleClass="subtitle"/>
+                <ComboBox fx:id="cvCombo" promptText="— Select CV —" prefWidth="200" styleClass="combo-box"/>
+
+                <Button text="Back" onAction="#goToDashboard" styleClass="ghost-btn"/>
             </HBox>
 
-            <!-- TABLE -->
-            <VBox VBox.vgrow="ALWAYS" styleClass="panel">
-                <TableView fx:id="jobTable" VBox.vgrow="ALWAYS">
-                    <columns>
-                        <TableColumn text="Title" prefWidth="160">
-                            <cellValueFactory><PropertyValueFactory property="title"/></cellValueFactory>
-                        </TableColumn>
-                        <TableColumn text="Company" prefWidth="140">
-                            <cellValueFactory><PropertyValueFactory property="company"/></cellValueFactory>
-                        </TableColumn>
-                        <TableColumn text="Location" prefWidth="130">
-                            <cellValueFactory><PropertyValueFactory property="location"/></cellValueFactory>
-                        </TableColumn>
-                        <TableColumn text="Description" prefWidth="200">
-                            <cellValueFactory><PropertyValueFactory property="description"/></cellValueFactory>
-                        </TableColumn>
-                        <TableColumn text="Link" prefWidth="150">
-                            <cellValueFactory><PropertyValueFactory property="link"/></cellValueFactory>
-                        </TableColumn>
-                    </columns>
-                </TableView>
-            </VBox>
+            <!-- JOB CARDS -->
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                        style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                <VBox fx:id="jobCardsContainer" spacing="14"/>
+            </ScrollPane>
 
         </VBox>
 

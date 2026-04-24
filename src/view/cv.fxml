@@ -17,7 +17,7 @@
 
             <Button text="⌂  Dashboard" onAction="#goToDashboard"
                     maxWidth="Infinity" styleClass="nav-btn"/>
-            <Button text="☰  My CVs"
+            <Button text="＋ Create CV"
                     maxWidth="Infinity" styleClass="nav-btn, active"/>
 
             <Region VBox.vgrow="ALWAYS"/>
@@ -30,13 +30,9 @@
             <!-- TOP BAR -->
             <HBox alignment="CENTER_LEFT" spacing="12" styleClass="top-bar">
                 <VBox HBox.hgrow="ALWAYS" spacing="2">
-                    <Label text="My CVs"                      styleClass="page-title"/>
-                    <Label text="Create and manage your CVs"  styleClass="subtitle"/>
+                    <Label fx:id="pageTitleLabel" text="Create CV" styleClass="page-title"/>
+                    <Label fx:id="pageSubtitleLabel" text="Fill in the form to create a new CV" styleClass="subtitle"/>
                 </VBox>
-                <Label text="Select CV:" styleClass="subtitle"/>
-                <ComboBox fx:id="cvCombo" promptText="— New CV —"
-                          onAction="#handleSelectCv" prefWidth="180"
-                          styleClass="combo-box"/>
             </HBox>
 
             <!-- SCROLLABLE FORM -->
@@ -87,7 +83,6 @@
                                       styleClass="form-area"/>
                         </VBox>
                     </VBox>
-                    <!-- └──────────────────────────────────────────┘ -->
 
                     <!-- ┌─ FORMATION ACADÉMIQUE ───────────────────┐ -->
                     <VBox styleClass="panel" spacing="12">
@@ -102,7 +97,6 @@
                         <Separator styleClass="separator"/>
                         <VBox fx:id="educationContainer" spacing="10"/>
                     </VBox>
-                    <!-- └──────────────────────────────────────────┘ -->
 
                     <!-- ┌─ PROFESSIONAL EXPERIENCE ────────────────┐ -->
                     <VBox styleClass="panel" spacing="12">
@@ -117,7 +111,6 @@
                         <Separator styleClass="separator"/>
                         <VBox fx:id="experienceContainer" spacing="10"/>
                     </VBox>
-                    <!-- └──────────────────────────────────────────┘ -->
 
                     <!-- ┌─ SKILLS ─────────────────────────────────┐ -->
                     <VBox styleClass="panel" spacing="12">
@@ -137,7 +130,6 @@
                                     styleClass="small-btn"/>
                         </HBox>
                     </VBox>
-                    <!-- └──────────────────────────────────────────┘ -->
 
                     <!-- ┌─ LANGUAGES ──────────────────────────────┐ -->
                     <VBox styleClass="panel" spacing="12">
@@ -153,28 +145,16 @@
                         <Separator styleClass="separator"/>
                         <VBox fx:id="languagesContainer" spacing="8"/>
                     </VBox>
-                    <!-- └──────────────────────────────────────────┘ -->
 
                     <!-- ┌─ ACTIONS ────────────────────────────────┐ -->
                     <VBox styleClass="panel" spacing="12">
                         <Label text="Actions" styleClass="panel-title"/>
                         <Separator styleClass="separator"/>
-                        <HBox spacing="10" alignment="CENTER_LEFT">
-                            <Button text="✔  Create"       onAction="#handleCreate"
-                                    styleClass="success-btn" prefWidth="110"/>
-                            <Button text="↻  Update"       onAction="#handleUpdate"
-                                    styleClass="warning-btn" prefWidth="110"/>
-                            <Button text="✖  Delete"       onAction="#handleDelete"
-                                    styleClass="danger-btn"  prefWidth="110"/>
-                            <Region HBox.hgrow="ALWAYS"/>
-                            <Button text="⬇  Download PDF" onAction="#handleDownload"
-                                    styleClass="accent-btn"  prefWidth="145"/>
-                            <Button text="✦  AI Advice"    onAction="#handleAiAdvice"
-                                    styleClass="info-btn"    prefWidth="120"/>
+                        <HBox fx:id="actionsBox" spacing="10" alignment="CENTER_LEFT">
+                            <!-- Buttons are dynamically added by controller based on mode -->
                         </HBox>
                         <Label fx:id="messageLabel" styleClass="message-label"/>
                     </VBox>
-                    <!-- └──────────────────────────────────────────┘ -->
 
                     <!-- ┌─ AI ADVICE OUTPUT ───────────────────────┐ -->
                     <VBox styleClass="panel" spacing="12">
@@ -191,7 +171,6 @@
                                   promptText="Click 'AI Advice' to receive personalised suggestions..."
                                   styleClass="chat-area"/>
                     </VBox>
-                    <!-- └──────────────────────────────────────────┘ -->
 
                 </VBox>
             </ScrollPane>

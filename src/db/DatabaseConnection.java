@@ -46,6 +46,36 @@ public class DatabaseConnection {
                     + "requirements TEXT,"
                     + "link TEXT)");
 
+            stmt.execute("CREATE TABLE IF NOT EXISTS notifications ("
+                    + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + "user_id INTEGER NOT NULL,"
+                    + "admin_id INTEGER,"
+                    + "job_id INTEGER NOT NULL,"
+                    + "cv_id INTEGER NOT NULL,"
+                    + "type TEXT NOT NULL,"
+                    + "message TEXT,"
+                    + "is_read INTEGER DEFAULT 0,"
+                    + "created_at TEXT DEFAULT CURRENT_TIMESTAMP,"
+                    + "FOREIGN KEY (user_id) REFERENCES users(id),"
+                    + "FOREIGN KEY (job_id) REFERENCES jobs(id),"
+                    + "FOREIGN KEY (cv_id) REFERENCES cvs(id))");
+
+            stmt.execute("CREATE TABLE IF NOT EXISTS support_tickets ("
+                    + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + "user_id INTEGER NOT NULL,"
+                    + "subject TEXT NOT NULL,"
+                    + "message TEXT NOT NULL,"
+                    + "status TEXT DEFAULT 'open',"
+                    + "admin_response TEXT,"
+                    + "created_at TEXT DEFAULT CURRENT_TIMESTAMP,"
+                    + "FOREIGN KEY (user_id) REFERENCES users(id))");
+
+            // Safe migrations — add columns if missing
+            safeAlter(stmt, "ALTER TABLE users ADD COLUMN profile_picture TEXT");
+            safeAlter(stmt, "ALTER TABLE users ADD COLUMN bio TEXT");
+            safeAlter(stmt, "ALTER TABLE jobs ADD COLUMN status TEXT DEFAULT 'available'");
+            safeAlter(stmt, "ALTER TABLE jobs ADD COLUMN users_applied TEXT");
+
             // insert default admin if not exists
             ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM users WHERE email='admin@admin.com'");
             if (rs.next() && rs.getInt(1) == 0) {
@@ -56,5 +86,9 @@ public class DatabaseConnection {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void safeAlter(Statement stmt, String sql) {
+        try { stmt.execute(sql); } catch (SQLException ignored) {}
     }
 }

@@ -1,11 +1,10 @@
 package controller;
 
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import dao.CVDAO;
@@ -24,21 +23,61 @@ public class JobGuideController {
     @FXML private VBox rootPane;
     @FXML private TextArea chatArea;
     @FXML private TextField userInput;
+    @FXML private ComboBox<Cv> cvCombo;
 
     private String mode = "chat";
     private List<String> interviewQuestions = new ArrayList<>();
     private int questionIndex = 0;
-
-    // Tracks whether the user is retrying the current question after feedback
     private boolean awaitingRetry = false;
+    private Cv selectedCv = null;
+
+    // Matched jobs for "preview <number>" command
+    private List<Job> lastMatchedJobs = new ArrayList<>();
 
     @FXML
     public void initialize() {
+        loadCvCombo();
         appendBot("Hi! I'm your Job Guide assistant.\n"
-                + "Use the buttons above or just type a question.\n"
-                + "- Interview Practice: I'll ask you common interview questions\n"
-                + "- CV Advice: I'll review your CV and suggest improvements\n"
-                + "- Matching Jobs: I'll find jobs that match your skills\n");
+                + "1. Select a CV from the dropdown above\n"
+                + "2. Choose a mode: Interview Practice, CV Advice, or Matching Jobs\n"
+                + "3. Or just type a career question!\n");
+    }
+
+    private void loadCvCombo() {
+        User user = AuthService.getCurrentUser();
+        if (user == null || cvCombo == null) return;
+        List<Cv> cvs = new CVDAO().findByUserId(user.getId());
+        cvCombo.setItems(FXCollections.observableArrayList(cvs));
+        if (!cvs.isEmpty()) {
+            cvCombo.setValue(cvs.get(0));
+            selectedCv = cvs.get(0);
+        }
+    }
+
+    @FXML
+    private void handleCvChange() {
+        selectedCv = cvCombo.getValue();
+        if (selectedCv != null) {
+            appendBot("Switched to CV: " + selectedCv.getFullName());
+        }
+    }
+
+    @FXML
+    private void handleNewChat() {
+        chatArea.setText("");
+        mode = "chat";
+        questionIndex = 0;
+        awaitingRetry = false;
+        lastMatchedJobs.clear();
+        appendBot("Chat cleared! Select a mode or type a question.");
+    }
+
+    private boolean requireCv() {
+        if (selectedCv == null) {
+            appendBot("⚠ Please select a CV from the dropdown first.");
+            return false;
+        }
+        return true;
     }
 
     @FXML
@@ -47,6 +86,26 @@ public class JobGuideController {
         if (text.isEmpty()) return;
         userInput.setText("");
         appendUser(text);
+
+        // Handle "preview <number>" command for matched jobs
+        if (text.toLowerCase().startsWith("preview ") && !lastMatchedJobs.isEmpty()) {
+            try {
+                int idx = Integer.parseInt(text.substring(8).trim()) - 1;
+                if (idx >= 0 && idx < lastMatchedJobs.size()) {
+                    Job job = lastMatchedJobs.get(idx);
+                    appendBot("Opening preview for: " + job.getTitle() + " at " + job.getCompany() + "...");
+                    // Navigate to Jobs page with preview
+                    JobController.previewJobId = job.getId();
+                    goToJobs();
+                    return;
+                } else {
+                    appendBot("Invalid job number. Type 'preview 1' to 'preview " + lastMatchedJobs.size() + "'.");
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                // Not a number, fall through to normal handling
+            }
+        }
 
         if ("interview".equals(mode)) {
             if (awaitingRetry) {
@@ -70,6 +129,7 @@ public class JobGuideController {
 
     @FXML
     private void handleInterview() {
+        if (!requireCv()) return;
         mode = "interview";
         questionIndex = 0;
         awaitingRetry = false;
@@ -84,9 +144,10 @@ public class JobGuideController {
         interviewQuestions.add("Do you have any questions for us?");
 
         chatArea.setText("");
-        appendBot("Interview Practice Mode!\nI'll ask you common interview questions. "
-                + "Answer each one and I'll give you feedback + an example of a stronger answer.\n"
-                + "You can then try again or type 'next' to move on.\n");
+        appendBot("Interview Practice Mode! (Using CV: " + selectedCv.getFullName() + ")\n"
+                + "I'll ask you common interview questions. "
+                + "Answer each one and I'll give you feedback + an example.\n"
+                + "Try again or type 'next' to move on.\n");
         askNextQuestion();
     }
 
@@ -102,12 +163,8 @@ public class JobGuideController {
         }
     }
 
-    // Called on the FIRST attempt at a question — gives feedback + example, then waits for retry
     private void handleInterviewAnswer(String answer) {
-        if (questionIndex >= interviewQuestions.size()) {
-            mode = "chat";
-            return;
-        }
+        if (questionIndex >= interviewQuestions.size()) { mode = "chat"; return; }
         String question = interviewQuestions.get(questionIndex);
         appendBot("Evaluating your answer...");
 
@@ -116,21 +173,19 @@ public class JobGuideController {
                     + question + "\"\n"
                     + "The candidate answered: \"" + answer + "\"\n\n"
                     + "Reply in this exact format:\n"
-                    + "FEEDBACK: (2-3 lines max — what was good and what was weak)\n"
-                    + "EXAMPLE: (write a stronger model answer they can learn from, 3-5 lines)\n"
+                    + "FEEDBACK: (2-3 lines max)\n"
+                    + "EXAMPLE: (stronger model answer, 3-5 lines)\n"
                     + "Be direct and encouraging.";
             String reply = AiService.askGemini(prompt);
 
             javafx.application.Platform.runLater(() -> {
                 removeLast("Evaluating your answer...");
-                appendBot(reply
-                        + "\n\n--- Try again with a better answer, or type 'next' to move on. ---");
+                appendBot(reply + "\n\n--- Try again with a better answer, or type 'next' to move on. ---");
                 awaitingRetry = true;
             });
         }).start();
     }
 
-    // Called on the RETRY attempt — praises improvement, then moves to next question
     private void handleRetryAnswer(String answer) {
         if ("next".equalsIgnoreCase(answer)) {
             questionIndex++;
@@ -146,8 +201,7 @@ public class JobGuideController {
                     + question + "\"\n"
                     + "The candidate just gave this improved answer: \"" + answer + "\"\n\n"
                     + "Acknowledge their improvement warmly in 1-2 lines. "
-                    + "Mention one specific thing they did well in this version. "
-                    + "Be encouraging and concise.";
+                    + "Mention one specific thing they did well. Be encouraging and concise.";
             String reply = AiService.askGemini(prompt);
 
             javafx.application.Platform.runLater(() -> {
@@ -161,31 +215,22 @@ public class JobGuideController {
 
     @FXML
     private void handleCvAdvice() {
+        if (!requireCv()) return;
         mode = "cvadvice";
-        User user = AuthService.getCurrentUser();
-        if (user == null) { appendBot("Please log in first."); return; }
 
-        CVDAO cvDAO = new CVDAO();
-        List<Cv> cvs = cvDAO.findByUserId(user.getId());
-        if (cvs.isEmpty()) {
-            appendBot("You have no CVs yet. Go to 'My CVs' to create one first.");
-            return;
-        }
-
-        Cv cv = cvs.get(0);
-        appendBot("Analyzing your CV (" + cv.getFullName() + ")...");
+        appendBot("Analyzing your CV (" + selectedCv.getFullName() + ")...");
         new Thread(() -> {
             String prompt = "You are a CV expert. Review this CV and give specific, actionable advice:\n"
-                    + "Name: " + safe(cv.getFullName()) + "\n"
-                    + "Objective: " + safe(cv.getObjective()) + "\n"
-                    + "Education: " + safe(cv.getEducation()) + "\n"
-                    + "Experience: " + safe(cv.getExperience()) + "\n"
-                    + "Skills: " + safe(cv.getSkills()) + "\n"
-                    + "Languages: " + safe(cv.getLanguages()) + "\n"
+                    + "Name: " + safe(selectedCv.getFullName()) + "\n"
+                    + "Objective: " + safe(selectedCv.getObjective()) + "\n"
+                    + "Education: " + safe(selectedCv.getEducation()) + "\n"
+                    + "Experience: " + safe(selectedCv.getExperience()) + "\n"
+                    + "Skills: " + safe(selectedCv.getSkills()) + "\n"
+                    + "Languages: " + safe(selectedCv.getLanguages()) + "\n"
                     + "List 5 specific improvements. Be concise.";
             String reply = AiService.askGemini(prompt);
             javafx.application.Platform.runLater(() -> {
-                removeLast("Analyzing your CV (" + cv.getFullName() + ")...");
+                removeLast("Analyzing your CV (" + selectedCv.getFullName() + ")...");
                 appendBot("CV Advice:\n" + reply);
                 mode = "chat";
             });
@@ -194,26 +239,18 @@ public class JobGuideController {
 
     @FXML
     private void handleMatchingJobs() {
-        User user = AuthService.getCurrentUser();
-        if (user == null) { appendBot("Please log in first."); return; }
+        if (!requireCv()) return;
 
-        CVDAO cvDAO = new CVDAO();
-        List<Cv> cvs = cvDAO.findByUserId(user.getId());
-        if (cvs.isEmpty()) {
-            appendBot("Create a CV first so I can match your skills to jobs.");
-            return;
-        }
-
-        String userSkills = safe(cvs.get(0).getSkills()).toLowerCase();
+        String userSkills = safe(selectedCv.getSkills()).toLowerCase();
         if (userSkills.isEmpty()) {
-            appendBot("Your CV has no skills listed. Add skills to get job matches.");
+            appendBot("Your selected CV has no skills listed. Add skills to get job matches.");
             return;
         }
 
         JobOfferDAO jobDAO = new JobOfferDAO();
-        List<Job> allJobs = jobDAO.findAll();
+        List<Job> allJobs = jobDAO.findAvailable();
         if (allJobs.isEmpty()) {
-            appendBot("No jobs available right now. Ask an admin to add some.");
+            appendBot("No available jobs right now. Ask an admin to add some.");
             return;
         }
 
@@ -229,43 +266,47 @@ public class JobGuideController {
             }
         }
 
+        lastMatchedJobs.clear();
+
         if (matched.isEmpty()) {
             appendBot("No exact skill matches found. Here are all available jobs:");
-            for (Job j : allJobs) {
-                appendBot("- " + j.getTitle() + " at " + j.getCompany()
-                        + (j.getLink() != null && !j.getLink().isEmpty() ? " | Link: " + j.getLink() : ""));
+            lastMatchedJobs.addAll(allJobs);
+            for (int i = 0; i < allJobs.size(); i++) {
+                Job j = allJobs.get(i);
+                appendBot((i + 1) + ". " + j.getTitle() + " at " + j.getCompany()
+                        + " — type 'preview " + (i + 1) + "' to view details");
             }
         } else {
             appendBot("Jobs matching your skills (" + userSkills + "):");
-            for (Job j : matched) {
-                appendBot("- " + j.getTitle() + " at " + j.getCompany()
+            lastMatchedJobs.addAll(matched);
+            for (int i = 0; i < matched.size(); i++) {
+                Job j = matched.get(i);
+                appendBot("✔ " + (i + 1) + ". " + j.getTitle() + " at " + j.getCompany()
                         + " [" + j.getLocation() + "]"
-                        + (j.getLink() != null && !j.getLink().isEmpty() ? " | Link: " + j.getLink() : ""));
+                        + " — type 'preview " + (i + 1) + "' to view & apply");
             }
         }
+        appendBot("\nType 'preview <number>' to open the job details page.");
     }
 
-    private void appendBot(String msg) {
-        chatArea.appendText("Bot: " + msg + "\n\n");
-    }
-
-    private void appendUser(String msg) {
-        chatArea.appendText("You: " + msg + "\n\n");
-    }
+    private void appendBot(String msg) { chatArea.appendText("Bot: " + msg + "\n\n"); }
+    private void appendUser(String msg) { chatArea.appendText("You: " + msg + "\n\n"); }
 
     private void removeLast(String text) {
         String content = chatArea.getText();
         int idx = content.lastIndexOf("Bot: " + text);
-        if (idx >= 0) {
-            chatArea.setText(content.substring(0, idx));
-        }
+        if (idx >= 0) chatArea.setText(content.substring(0, idx));
     }
 
     private String safe(String s) { return s == null ? "" : s; }
 
-    @FXML private void goToDashboard() {
+    @FXML private void goToDashboard() { loadScene("/view/dashboard.fxml"); }
+
+    private void goToJobs() { loadScene("/view/Job.fxml"); }
+
+    private void loadScene(String fxml) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/view/dashboard.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource(fxml));
             Stage stage = (Stage) rootPane.getScene().getWindow();
             stage.getScene().setRoot(root);
         } catch (Exception e) { e.printStackTrace(); }

@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CV Creator – Documentation Complète du Projet</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background:#f5f7fa; color:#1a1a2e; font-size:14px; }
+  .cover { background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%); color:white; text-align:center; padding:100px 40px; min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; }
+  .cover h1 { font-size:52px; font-weight:800; letter-spacing:2px; margin-bottom:16px; }
+  .cover h2 { font-size:24px; font-weight:300; opacity:0.8; margin-bottom:40px; }
+  .cover .badge { background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); border-radius:50px; padding:10px 30px; font-size:15px; margin:6px; display:inline-block; }
+  .cover .meta { margin-top:60px; opacity:0.6; font-size:13px; }
+  .toc { background:white; max-width:900px; margin:40px auto; border-radius:16px; padding:40px; box-shadow:0 4px 20px rgba(0,0,0,0.08); }
+  .toc h2 { color:#0f3460; font-size:26px; margin-bottom:24px; border-bottom:3px solid #e94560; padding-bottom:10px; }
+  .toc ol { padding-left:20px; }
+  .toc li { padding:6px 0; font-size:15px; }
+  .toc a { color:#0f3460; text-decoration:none; }
+  .toc a:hover { color:#e94560; }
+  .section { background:white; max-width:900px; margin:30px auto; border-radius:16px; padding:40px; box-shadow:0 4px 20px rgba(0,0,0,0.08); page-break-before: always; }
+  .section-header { background:linear-gradient(90deg,#0f3460,#16213e); color:white; border-radius:10px; padding:20px 28px; margin-bottom:28px; }
+  .section-header h2 { font-size:24px; font-weight:700; }
+  .section-header p { opacity:0.8; margin-top:6px; font-size:14px; }
+  .layer-badge { display:inline-block; padding:4px 14px; border-radius:20px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:12px; }
+  .layer-model { background:#e8f5e9; color:#2e7d32; }
+  .layer-dao { background:#e3f2fd; color:#1565c0; }
+  .layer-service { background:#fff3e0; color:#e65100; }
+  .layer-controller { background:#fce4ec; color:#c62828; }
+  .layer-view { background:#f3e5f5; color:#6a1b9a; }
+  .layer-db { background:#e0f2f1; color:#00695c; }
+  .layer-main { background:#fafafa; color:#333; border:1px solid #ddd; }
+  .class-card { border:1px solid #e0e0e0; border-radius:12px; margin-bottom:24px; overflow:hidden; }
+  .class-card-header { padding:16px 20px; background:#f8f9fa; border-bottom:1px solid #e0e0e0; display:flex; align-items:center; gap:12px; }
+  .class-card-header h3 { font-size:20px; color:#0f3460; font-family:monospace; }
+  .class-card-body { padding:20px; }
+  .class-card-body p { line-height:1.7; color:#444; margin-bottom:12px; }
+  .func-table { width:100%; border-collapse:collapse; margin-top:16px; }
+  .func-table th { background:#0f3460; color:white; padding:10px 14px; text-align:left; font-size:13px; }
+  .func-table td { padding:10px 14px; border-bottom:1px solid #f0f0f0; font-size:13px; vertical-align:top; }
+  .func-table tr:hover td { background:#f8f9fa; }
+  .func-table td:first-child { font-family:monospace; color:#c62828; font-weight:600; white-space:nowrap; }
+  .field-table { width:100%; border-collapse:collapse; margin-top:8px; margin-bottom:16px; }
+  .field-table th { background:#455a64; color:white; padding:8px 12px; font-size:12px; text-align:left; }
+  .field-table td { padding:8px 12px; border-bottom:1px solid #eceff1; font-size:12px; font-family:monospace; }
+  .field-table tr:nth-child(even) td { background:#f5f5f5; }
+  .arch-box { background:#f8f9fa; border:2px dashed #cfd8dc; border-radius:12px; padding:24px; margin:20px 0; text-align:center; }
+  .arch-box h4 { color:#0f3460; margin-bottom:16px; font-size:16px; }
+  .arch-flow { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:8px; }
+  .arch-node { background:#0f3460; color:white; border-radius:8px; padding:10px 18px; font-size:13px; font-weight:600; }
+  .arch-arrow { font-size:22px; color:#e94560; }
+  .note { background:#fffde7; border-left:4px solid #f9a825; padding:12px 16px; border-radius:0 8px 8px 0; margin:16px 0; font-size:13px; color:#555; }
+  .db-table { width:100%; border-collapse:collapse; margin-top:10px; }
+  .db-table th { background:#00695c; color:white; padding:9px 14px; text-align:left; font-size:13px; }
+  .db-table td { padding:9px 14px; border-bottom:1px solid #e0f2f1; font-size:13px; }
+  .pk { color:#e65100; font-weight:700; }
+  .fk { color:#1565c0; font-style:italic; }
+  h4 { color:#0f3460; margin:18px 0 10px; font-size:15px; }
+  @media print {
+    body { background:white; }
+    .cover { page-break-after: always; min-height:auto; padding:60px 40px; }
+    .section { box-shadow:none; border:1px solid #ddd; }
+    .toc { box-shadow:none; border:1px solid #ddd; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER PAGE -->
+<div class="cover">
+  <h1>📄 CV Creator</h1>
+  <h2>Documentation Détaillée du Projet</h2>
+  <div>
+    <span class="badge">Java 17</span>
+    <span class="badge">JavaFX 17</span>
+    <span class="badge">SQLite</span>
+    <span class="badge">Gemini AI</span>
+    <span class="badge">Apache PDFBox</span>
+    <span class="badge">Maven</span>
+  </div>
+  <div style="margin-top:50px; max-width:620px; opacity:0.85; line-height:1.8; font-size:16px;">
+    Une application de bureau complète qui permet aux utilisateurs de créer, gérer et exporter des CV professionnels,
+    de parcourir les offres d'emploi, d'obtenir des conseils de carrière via une IA, et de s'entraîner aux entretiens.
+  </div>
+  <div class="meta">
+    <div>Architecture : MVC (Modèle – Vue – Contrôleur) + DAO + Services</div>
+    <div style="margin-top:6px;">Base de données : SQLite &nbsp;|&nbsp; IA : Google Gemini 2.5 Flash &nbsp;|&nbsp; PDF : Apache PDFBox</div>
+    <div style="margin-top:6px;">Généré : Avril 2026</div>
+  </div>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc" id="toc">
+  <h2>📋 Table des Matières</h2>
+  <ol>
+    <li><a href="#architecture">1. Aperçu de l'Architecture du Projet</a></li>
+    <li><a href="#main">2. Main.java – Point d'Entrée</a></li>
+    <li><a href="#models">3. Couche Modèle (Models) – Objets de Données</a></li>
+    <li><a href="#db">4. Couche Base de Données</a></li>
+    <li><a href="#dao">5. Couche DAO (Data Access Object)</a></li>
+    <li><a href="#services">6. Couche Service (Services)</a></li>
+    <li><a href="#controllers">7. Couche Contrôleur (Controllers)</a></li>
+    <li><a href="#database-schema">8. Schéma de la Base de Données</a></li>
+    <li><a href="#flow">9. Flux de l'Application et Parcours Utilisateur</a></li>
+  </ol>
+</div>
+
+<!-- SECTION 1: ARCHITECTURE -->
+<div class="section" id="architecture">
+  <div class="section-header">
+    <h2>1. Aperçu de l'Architecture du Projet</h2>
+    <p>Comment toutes les couches sont organisées et communiquent entre elles</p>
+  </div>
+
+  <p>Ce projet suit un modèle classique <strong>MVC (Modèle-Vue-Contrôleur)</strong> enrichi par une couche <strong>DAO (Data Access Object)</strong> et une couche <strong>Service</strong>. Cela permet à chaque morceau de code de se concentrer sur une seule tâche (Principe de Responsabilité Unique).</p>
+
+  <div class="arch-box">
+    <h4>Flux de Données – du clic utilisateur jusqu'à la base de données</h4>
+    <div class="arch-flow">
+      <div class="arch-node">👤 Utilisateur</div>
+      <span class="arch-arrow">→</span>
+      <div class="arch-node">🖥️ Vue (FXML)</div>
+      <span class="arch-arrow">→</span>
+      <div class="arch-node">🎮 Contrôleur</div>
+      <span class="arch-arrow">→</span>
+      <div class="arch-node">⚙️ Service</div>
+      <span class="arch-arrow">→</span>
+      <div class="arch-node">🗄️ DAO</div>
+      <span class="arch-arrow">→</span>
+      <div class="arch-node">💾 BD SQLite</div>
+    </div>
+  </div>
+
+  <h4>Responsabilités des Couches</h4>
+  <table class="func-table">
+    <tr><th>Couche</th><th>Package</th><th>Rôle</th></tr>
+    <tr><td>Modèle</td><td><code>model</code></td><td>Objets Java simples (POJO) qui contiennent des données. Aucune logique complexe, juste des champs et des getters/setters.</td></tr>
+    <tr><td>Base de Données</td><td><code>db</code></td><td>Crée la connexion SQLite et initialise les tables au premier lancement.</td></tr>
+    <tr><td>DAO</td><td><code>dao</code></td><td>Toutes les requêtes SQL (CRUD) se trouvent ici. Chaque DAO gère une seule table et renvoie des objets du Modèle.</td></tr>
+    <tr><td>Service</td><td><code>service</code></td><td>La logique métier : authentification, export PDF, appels à l'IA. Fait le pont entre les contrôleurs et les DAO.</td></tr>
+    <tr><td>Contrôleur</td><td><code>controller</code></td><td>Gère les événements de l'interface (clics de boutons). Appelle les Services/DAO et met à jour la Vue.</td></tr>
+    <tr><td>Vue</td><td><code>view</code></td><td>Fichiers XML (FXML) qui définissent la mise en page visuelle. Liés aux Contrôleurs.</td></tr>
+  </table>
+
+  <div class="note">💡 <strong>Règle de conception clé :</strong> Les contrôleurs ne touchent JAMAIS directement à la base de données. Ils appellent un Service ou un DAO. Les DAO contiennent tout le SQL. Cela rend le code propre, testable et facile à maintenir.</div>
+</div>
+
+<!-- SECTION 2: MAIN -->
+<div class="section" id="main">
+  <div class="section-header">
+    <h2>2. Main.java – Point d'Entrée</h2>
+    <p>La classe qui démarre toute l'application</p>
+  </div>
+  <div class="class-card">
+    <div class="class-card-header">
+      <span class="layer-badge layer-main">classe</span>
+      <h3>Main</h3>
+    </div>
+    <div class="class-card-body">
+      <p><strong>Package:</strong> racine</p>
+      <p><strong>Hérite de:</strong> <code>javafx.application.Application</code></p>
+      <p>C'est la toute première classe exécutée au lancement. Elle effectue trois actions importantes dans l'ordre :</p>
+      <ol style="padding-left:20px; line-height:2;">
+        <li>Appelle <code>DatabaseConnection.initializeDatabase()</code> pour créer la base de données SQLite et les tables si elles n'existent pas encore.</li>
+        <li>Charge la vue <code>landing.fxml</code> (page d'accueil) à l'aide de <code>FXMLLoader</code>.</li>
+        <li>Configure la fenêtre principale (Stage), lui donne un titre, la met en plein écran et l'affiche.</li>
+      </ol>
+      <table class="func-table">
+        <tr><th>Méthode</th><th>Retour</th><th>Description</th></tr>
+        <tr><td>start(Stage primaryStage)</td><td>void</td><td>Méthode du cycle de vie JavaFX. Initialise la BD, charge l'interface et affiche la fenêtre.</td></tr>
+        <tr><td>main(String[] args)</td><td>void</td><td>Point d'entrée standard Java. Appelle <code>launch(args)</code> qui déclenche le <code>start()</code>.</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 3: MODELS -->
+<div class="section" id="models">
+  <div class="section-header">
+    <h2>3. Couche Modèle (Models) – Objets de Données</h2>
+    <p>Classes Java simples (POJOs) représentant les entités du système</p>
+  </div>
+  <p>Les Modèles sont de simples conteneurs de données. Ils ont des champs privés et des getters/setters publics. Ils ne communiquent PAS avec la base de données. C'est la couche DAO qui lit/écrit ces modèles dans la base.</p>
+
+  <!-- USER MODEL -->
+  <div class="class-card" id="user-model">
+    <div class="class-card-header">
+      <span class="layer-badge layer-model">model</span>
+      <h3>User.java</h3>
+    </div>
+    <div class="class-card-body">
+      <p><strong>Package :</strong> model &nbsp;|&nbsp; <strong>But :</strong> Représente un utilisateur inscrit. Toute personne qui se connecte est stockée sous forme d'objet User.</p>
+      <h4>Champs</h4>
+      <table class="field-table">
+        <tr><th>Champ</th><th>Type</th><th>Description</th></tr>
+        <tr><td>id</td><td>int</td><td>Identifiant unique (auto-incrémenté par SQLite)</td></tr>
+        <tr><td>name</td><td>String</td><td>Nom complet affiché de l'utilisateur</td></tr>
+        <tr><td>email</td><td>String</td><td>Email unique – utilisé comme identifiant de connexion</td></tr>
+        <tr><td>password</td><td>String</td><td>Mot de passe en texte clair</td></tr>
+        <tr><td>role</td><td>String</td><td>Soit <code>"user"</code> soit <code>"admin"</code> – contrôle le niveau d'accès</td></tr>
+      </table>
+      <h4>Méthodes</h4>
+      <table class="func-table">
+        <tr><th>Méthode</th><th>Description</th></tr>
+        <tr><td>User()</td><td>Constructeur vide. Requis par certains frameworks lors de la création d'objets via la réflexion.</td></tr>
+        <tr><td>User(id, name, email, password, role)</td><td>Constructeur complet. Utilisé par le DAO lors de la conversion d'une ligne de la base de données en objet User.</td></tr>
+        <tr><td>Getters / Setters</td><td>Méthodes standards pour lire/modifier les champs.</td></tr>
+        <tr><td>isAdmin()</td><td>Renvoie <code>true</code> si le rôle est <code>"admin"</code>. Utilisé pour afficher/cacher les boutons administrateur.</td></tr>
+        <tr><td>toString()</td><td>Renvoie <code>"nom (email)"</code>. Utilisé pour l'affichage dans les listes.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- CV MODEL -->
+  <div class="class-card" id="cv-model">
+    <div class="class-card-header">
+      <span class="layer-badge layer-model">model</span>
+      <h3>Cv.java</h3>
+    </div>
+    <div class="class-card-body">
+      <p><strong>Package :</strong> model &nbsp;|&nbsp; <strong>But :</strong> Représente un document CV appartenant à un utilisateur. Un utilisateur peut avoir plusieurs CVs.</p>
+      <h4>Champs</h4>
+      <table class="field-table">
+        <tr><th>Champ</th><th>Type</th><th>Description</th></tr>
+        <tr><td>id</td><td>int</td><td>Identifiant unique du CV dans la BD</td></tr>
+        <tr><td>userId</td><td>int</td><td>Clé étrangère liant ce CV à son propriétaire (un User)</td></tr>
+        <tr><td>fullName</td><td>String</td><td>Nom complet de la personne tel qu'il apparaît sur le CV</td></tr>
+        <tr><td>email, phone, address</td><td>String</td><td>Informations de contact du CV</td></tr>
+        <tr><td>objective</td><td>String</td><td>Paragraphe de résumé / objectif de carrière</td></tr>
+        <tr><td>education</td><td>String</td><td>Entrées d'éducation séparées par <code>\n---\n</code></td></tr>
+        <tr><td>experience</td><td>String</td><td>Entrées d'expérience séparées par <code>\n---\n</code></td></tr>
+        <tr><td>skills</td><td>String</td><td>Liste de compétences séparées par des virgules (ex: "Java, Python, SQL")</td></tr>
+        <tr><td>languages</td><td>String</td><td>Liste de langues (ex: "Français (Bilingue), Anglais (Courant)")</td></tr>
+      </table>
+      <div class="note">📌 <strong>Format de stockage :</strong> L'éducation et l'expérience sont stockées sous forme d'une longue chaîne (String), où chaque ligne est séparée par le délimiteur <code>\n---\n</code>. Le contrôleur découpe cette chaîne pour recréer l'interface.</div>
+    </div>
+  </div>
+
+  <!-- JOB MODEL -->
+  <div class="class-card" id="job-model">
+    <div class="class-card-header">
+      <span class="layer-badge layer-model">model</span>
+      <h3>Job.java</h3>
+    </div>
+    <div class="class-card-body">
+      <p><strong>Package :</strong> model &nbsp;|&nbsp; <strong>But :</strong> Représente une offre d'emploi postée par un administrateur.</p>
+      <h4>Champs</h4>
+      <table class="field-table">
+        <tr><th>Champ</th><th>Type</th><th>Description</th></tr>
+        <tr><td>id</td><td>int</td><td>Identifiant unique de l'offre</td></tr>
+        <tr><td>title</td><td>String</td><td>Titre du poste (ex: "Développeur Java")</td></tr>
+        <tr><td>company</td><td>String</td><td>Nom de l'entreprise qui recrute</td></tr>
+        <tr><td>location</td><td>String</td><td>Lieu de travail</td></tr>
+        <tr><td>description</td><td>String</td><td>Description complète du poste</td></tr>
+        <tr><td>requirements</td><td>String</td><td>Compétences et qualifications requises</td></tr>
+        <tr><td>link</td><td>String</td><td>URL vers l'annonce externe</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4: DATABASE -->
+<div class="section" id="db">
+  <div class="section-header">
+    <h2>4. Couche Base de Données – DatabaseConnection.java</h2>
+    <p>Le point de contact unique entre l'application et le fichier SQLite</p>
+  </div>
+  <span class="layer-badge layer-db">db</span>
+  <div class="class-card">
+    <div class="class-card-header">
+      <span class="layer-badge layer-db">classe</span>
+      <h3>DatabaseConnection</h3>
+    </div>
+    <div class="class-card-body">
+      <p><strong>Package :</strong> db &nbsp;|&nbsp; <strong>Fichier :</strong> cvcreator.db (SQLite)</p>
+      <p>Cette classe utilitaire a deux rôles : fournir une connexion à la base de données à ceux qui en ont besoin, et créer toutes les tables au premier lancement. Elle utilise le driver <strong>JDBC SQLite</strong> de Xerial.</p>
+      <table class="func-table">
+        <tr><th>Méthode</th><th>Retour</th><th>Description</th></tr>
+        <tr><td>getConnection()</td><td>Connection</td><td><strong>Statique.</strong> Ouvre et renvoie une nouvelle connexion JDBC vers <code>cvcreator.db</code>. Chaque DAO appelle cette méthode à chaque fois qu'il doit exécuter une requête SQL. Utilise le try-with-resources pour fermer automatiquement les connexions.</td></tr>
+        <tr><td>initializeDatabase()</td><td>void</td><td><strong>Statique.</strong> Appelée une fois au démarrage par <code>Main.java</code>. Crée trois tables (<code>users</code>, <code>cvs</code>, <code>jobs</code>) en utilisant <code>IF NOT EXISTS</code>, ce qui permet de l'appeler à chaque lancement sans risque. Insère également le compte admin par défaut s'il n'existe pas.</td></tr>
+      </table>
+      <div class="note">🔑 <strong>Compte Admin par Défaut :</strong> Au premier lancement, si aucun utilisateur avec l'email <code>admin@admin.com</code> n'existe, le système en crée un automatiquement avec le mot de passe <code>admin123</code> et le rôle <code>admin</code>. Cela garantit un accès au tableau de bord administrateur.</div>
+      <h4>URL de Connexion</h4>
+      <p>La chaîne de connexion est : <code>jdbc:sqlite:cvcreator.db</code> — cela signifie que SQLite cherchera (ou créera) un fichier nommé <code>cvcreator.db</code> dans le répertoire de travail (la racine du projet).</p>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 5: DAO -->
+<div class="section" id="dao">
+  <div class="section-header">
+    <h2>5. Couche DAO (Data Access Object)</h2>
+    <p>Toutes les requêtes SQL y sont contenues. Chaque classe DAO gère une table.</p>
+  </div>
+  <p>Le <strong>modèle DAO</strong> sépare la logique de la base de données de la logique métier. Chaque classe DAO sait comment : <strong>Insérer</strong>, <strong>Mettre à jour</strong>, <strong>Supprimer</strong> et <strong>Trouver</strong> des enregistrements pour sa table. Elles utilisent toutes <code>PreparedStatement</code> pour prévenir les injections SQL.</p>
+
+  <!-- UserDAO -->
+  <div class="class-card" id="userdao">
+    <div class="class-card-header">
+      <span class="layer-badge layer-dao">dao</span>
+      <h3>UserDAO.java</h3>
+    </div>
+    <div class="class-card-body">
+      <p><strong>Package :</strong> dao &nbsp;|&nbsp; <strong>Gère la table :</strong> <code>users</code> &nbsp;|&nbsp; <strong>Renvoie :</strong> objets <code>User</code></p>
+      <table class="func-table">
+        <tr><th>Méthode</th><th>Description</th></tr>
+        <tr><td>findByEmail(String email)</td><td>Recherche un utilisateur par son email. Renvoie un objet User ou <code>null</code>. Utilisé par <code>AuthService.login()</code>.</td></tr>
+        <tr><td>findAll()</td><td>Renvoie tous les utilisateurs. Utilisé par l'Admin pour remplir le tableau de gestion, et par la page d'accueil pour les statistiques.</td></tr>
+        <tr><td>insert(User u)</td><td>Insère un nouvel utilisateur. Renvoie <code>true</code> en cas de succès. Utilisé par <code>AuthService.register()</code>.</td></tr>
+        <tr><td>update(User u)</td><td>Met à jour les champs de l'utilisateur correspondant à <code>u.getId()</code>.</td></tr>
+        <tr><td>delete(int id)</td><td>Supprime l'utilisateur. L'administrateur ne peut pas se supprimer lui-même (vérifié dans le contrôleur).</td></tr>
+        <tr><td>map(ResultSet rs)</td><td><em>Privée.</em> Convertit une ligne de la base de données (ResultSet) en un objet User. Appelée en interne pour éviter la duplication de code.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- CVDAO -->
+  <div class="class-card" id="cvdao">
+    <div class="class-card-header">
+      <span class="layer-badge layer-dao">dao</span>
+      <h3>CVDAO.java</h3>
+    </div>
+    <div class="class-card-body">
+      <p><strong>Package :</strong> dao &nbsp;|&nbsp; <strong>Gère la table :</strong> <code>cvs</code> &nbsp;|&nbsp; <strong>Renvoie :</strong> objets <code>Cv</code></p>
+      <table class="func-table">
+        <tr><th>Méthode</th><th>Description</th></tr>
+        <tr><td>insert(Cv cv)</td><td>Insère les 10 champs du CV dans la table <code>cvs</code>. Appelé par <code>CvService.createCv()</code>.</td></tr>
+        <tr><td>update(Cv cv)</td><td>Met à jour 9 champs (tous sauf user_id). Appelé par <code>CvService.updateCv()</code>.</td></tr>
+        <tr><td>delete(int id)</td><td>Supprime le CV. Appelé par <code>CvService.deleteCv()</code>.</td></tr>
+        <tr><td>findByUserId(int userId)</td><td>Renvoie tous les CVs appartenant à un utilisateur spécifique. Utilisé sur l'écran CV et le tableau de bord.</td></tr>
+        <tr><td>findById(int id)</td><td>Renvoie un CV spécifique par son ID, ou <code>null</code>.</td></tr>
+        <tr><td>findAll()</td><td>Renvoie tous les CVs du système. Utilisé par l'Admin pour les statistiques globales.</td></tr>
+        <tr><td>map(ResultSet rs)</td><td><em>Privée.</em> Convertit une ligne de la BD en un objet Cv en utilisant les 11 colonnes.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- JobOfferDAO -->
+  <div class="class-card" id="jobdao">
+    <div class="class-card-header">
+      <span class="layer-badge layer-dao">dao</span>
+      <h3>JobOfferDAO.java</h3>
+    </div>
+    <div class="class-card-body">
+      <p><strong>Package :</strong> dao &nbsp;|&nbsp; <strong>Gère la table :</strong> <code>jobs</code> &nbsp;|&nbsp; <strong>Renvoie :</strong> objets <code>Job</code></p>
+      <table class="func-table">
+        <tr><th>Méthode</th><th>Description</th></tr>
+        <tr><td>insert(Job j)</td><td>Insère une nouvelle offre d'emploi. Appelé par <code>AdminController.handleAddJob()</code> après validation.</td></tr>
+        <tr><td>update(Job j)</td><td>Met à jour les 6 champs pour l'emploi correspondant. Appelé par <code>AdminController.handleUpdateJob()</code>.</td></tr>
+        <tr><td>delete(int id)</td><td>Supprime une offre de la base de données. Appelé par <code>AdminController.handleDeleteJob()</code>.</td></tr>
+        <tr><td>findAll()</td><td>Renvoie toutes les offres. Utilisé sur la page d'accueil, le navigateur d'emplois, le tableau de bord admin et l'assistant IA.</td></tr>
+        <tr><td>findById(int id)</td><td>Renvoie un emploi par son ID.</td></tr>
+        <tr><td>map(ResultSet rs)</td><td><em>Privée.</em> Convertit une ligne de la BD en un objet Job.</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 6: SERVICES -->
+<div class="section" id="services">
+  <div class="section-header">
+    <h2>6. Couche Service (Services)</h2>
+    <p>La logique métier qui fait le pont entre les Contrôleurs et les DAO</p>
+  </div>
+  <p>Les services contiennent une logique trop complexe pour un DAO mais trop réutilisable pour être placée dans un contrôleur spécifique. Ils constituent le "cerveau" de l'application.</p>
+
+  <!-- AuthService -->
+  <div class="class-card" id="authservice">
+    <div class="class-card-header">
+      <span class="layer-badge layer-service">service</span>
+      <h3>AuthService.java</h3>
+    </div>
+    <div class="class-card-body">
+      <p><strong>But :</strong> Gère l'utilisateur actuellement connecté sous forme de session globale. Gère la logique de connexion et d'inscription.</p>
+      <p><strong>Conception clé :</strong> <code>currentUser</code> est un champ <code>static</code> — il existe une seule fois pour toute la durée de vie de l'application. Cela agit comme une session simple en mémoire (typique pour une application de bureau).</p>
+      <table class="func-table">
+        <tr><th>Méthode</th><th>Description</th></tr>
+        <tr><td>getCurrentUser()</td><td>Renvoie l'utilisateur (User) actuellement connecté, ou <code>null</code> s'il n'y a pas de session.</td></tr>
+        <tr><td>logout()</td><td>Efface la session en définissant <code>currentUser = null</code>.</td></tr>
+        <tr><td>login(String email, String password)</td><td>Récupère l'utilisateur par email depuis la BD, puis compare le mot de passe. Si ça correspond, définit <code>currentUser</code> et renvoie l'utilisateur.</td></tr>
+        <tr><td>register(String name, String email, String password)</td><td>Vérifie si l'email existe déjà. Si non, crée un nouvel utilisateur avec le rôle <code>"user"</code> et l'insère. Renvoie <code>true</code> en cas de succès.</td></tr>
+      </table>
+      <div class="note">⚠️ <strong>Note de Sécurité :</strong> Les mots de passe sont stockés en texte clair. Dans un système en production, il faudrait utiliser un algorithme de hachage comme BCrypt. C'est acceptable pour un projet universitaire.</div>
+    </div>
+  </div>
+
+  <!-- CvService -->
+  <div class="class-card" id="cvservice">
+    <div class="class-card-header">
+      <span class="layer-badge layer-service">service</span>
+      <h3>CvService.java</h3>
+    </div>
+    <div class="class-card-body">
+      <p><strong>But :</strong> Enveloppe les opérations du CVDAO et gère la fonctionnalité d'export PDF en utilisant Apache PDFBox.</p>
+      <table class="func-table">
+        <tr><th>Méthode</th><th>Description</th></tr>
+        <tr><td>createCv(), updateCv(), deleteCv()</td><td>Délèguent simplement les appels aux méthodes correspondantes du <code>CVDAO</code>.</td></tr>
+        <tr><td>getCvsByUser(int userId)</td><td>Renvoie tous les CVs pour un ID utilisateur donné via <code>CVDAO.findByUserId()</code>.</td></tr>
+        <tr><td>exportToPdf(Cv cv, String filePath)</td><td>Méthode complexe. Utilise Apache PDFBox pour générer un PDF professionnellement formaté au chemin spécifié. Renvoie <code>true</code> en cas de succès.</td></tr>
+      </table>
+      <h4>Fonctionnement de exportToPdf()</h4>
+      <ol style="padding-left:20px; line-height:2; color:#444;">
+        <li>Crée un nouveau <code>PDDocument</code> avec une page A4.</li>
+        <li>Dessine une barre d'en-tête bleu foncé en haut de la page.</li>
+        <li>Écrit le nom complet (centré, grand texte blanc) et les infos de contact.</li>
+        <li>Appelle <code>addSection()</code> pour chaque section : Objectif, Éducation, Expérience, Compétences, Langues.</li>
+        <li>Chaque section a un titre coloré en gras, un soulignement fin, et un texte avec retour à la ligne automatique (word-wrap).</li>
+        <li>Sauvegarde le document.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- AiService -->
+  <div class="class-card" id="aiservice">
+    <div class="class-card-header">
+      <span class="layer-badge layer-service">service</span>
+      <h3>AiService.java</h3>
+    </div>
+    <div class="class-card-body">
+      <p><strong>But :</strong> Envoie des requêtes textuelles à l'API <strong>Google Gemini 2.5 Flash</strong> et renvoie la réponse de l'IA. Utilisé pour les conseils CV, le coaching d'entretien et le chatbot.</p>
+      <table class="func-table">
+        <tr><th>Méthode</th><th>Description</th></tr>
+        <tr><td>loadApiKey()</td><td><em>Privée.</em> Essaie de charger la clé API depuis : (1) la variable d'environnement système, puis (2) le fichier <code>.env</code>.</td></tr>
+        <tr><td>askGemini(String prompt)</td><td>Méthode publique principale. Envoie le prompt à Gemini et renvoie la réponse textuelle. Gère les erreurs HTTP (400, 403, 429, 503) avec des messages clairs. Inclut une logique de "retry" (nouvel essai) en cas de surcharge de l'IA.</td></tr>
+        <tr><td>buildRequestBody(String prompt)</td><td><em>Privée.</em> Construit le corps JSON de la requête Gemini en utilisant Gson.</td></tr>
+        <tr><td>extractText(String json)</td><td><em>Privée.</em> Analyse la réponse JSON de Gemini et extrait le texte utile.</td></tr>
+      </table>
+      <div class="note">💡 <strong>Multithreading :</strong> <code>askGemini()</code> est appelé depuis un thread en arrière-plan (background Thread) dans les contrôleurs pour éviter de figer l'interface JavaFX. La réponse est ensuite renvoyée à l'interface via <code>Platform.runLater()</code>.</div>
+      <h4>Configuration de la clé API</h4>
+      <p>Il faut créer un fichier nommé <code>.env</code> à la racine du projet avec cette ligne :</p>
+      <code style="background:#f0f0f0; padding:6px 12px; border-radius:6px; display:block; margin:8px 0;">API_KEY=votre_cle_api_gemini_ici</code>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 7: CONTROLLERS -->
+<div class="section" id="controllers">
+  <div class="section-header">
+    <h2>7. Couche Contrôleur (Controllers)</h2>
+    <p>Connexion des interfaces FXML aux Services et aux DAO</p>
+  </div>
+  <p>Chaque écran (fichier FXML) a une classe Contrôleur. Les contrôleurs répondent aux clics de boutons, lisent ce que l'utilisateur a tapé dans les formulaires, et mettent à jour les étiquettes et tableaux à l'écran.</p>
+
+  <!-- LandingController -->
+  <div class="class-card" id="landingctrl">
+    <div class="class-card-header">
+      <span class="layer-badge layer-controller">controller</span>
+      <h3>LandingController.java</h3>
+    </div>
+    <div class="class-card-body">
+      <p><strong>Écran :</strong> <code>landing.fxml</code> (Le tout premier écran)</p>
+      <p><strong>Rôle :</strong> Affiche un bel écran d'accueil. Il utilise les 3 DAO pour compter le total des utilisateurs, des CVs et des offres d'emploi afin d'afficher des statistiques dynamiques. Il charge aussi les 5 dernières offres d'emploi pour les afficher sous forme de cartes.</p>
+    </div>
+  </div>
+
+  <!-- UserController -->
+  <div class="class-card" id="userctrl">
+    <div class="class-card-header">
+      <span class="layer-badge layer-controller">controller</span>
+      <h3>UserController.java</h3>
+    </div>
+    <div class="class-card-body">
+      <p><strong>Écrans :</strong> <code>login.fxml</code>, <code>register.fxml</code>, <code>dashboard.fxml</code>, <code>profile.fxml</code></p>
+      <p><strong>Rôle :</strong></p>
+      <ul style="padding-left:20px; line-height:1.7; margin-bottom:10px;">
+        <li><strong>Auth :</strong> Gère la logique quand l'utilisateur clique sur Connexion ou Inscription. Valide les emails, mots de passe, et le format du nom. Appelle <code>AuthService</code>.</li>
+        <li><strong>Tableau de bord :</strong> Remplit le tableau de bord avec les CVs récents, calcule un "% de Complétion du Profil", et affiche le nombre de jobs disponibles.</li>
+        <li><strong>Recherche :</strong> Inclut un écouteur de recherche en temps réel qui filtre les CVs récents par nom, compétences ou objectif pendant la frappe.</li>
+        <li><strong>Navigation :</strong> Contient de nombreuses méthodes <code>goToX()</code> pour charger les autres écrans.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CVController -->
+  <div class="class-card" id="cvctrl">
+    <div class="class-card-header">
+      <span class="layer-badge layer-controller">controller</span>
+      <h3>CVController.java</h3>
+    </div>
+    <div class="class-card-body">
+      <p><strong>Écran :</strong> <code>cv.fxml</code> (L'Éditeur de CV)</p>
+      <p>C'est le plus gros contrôleur. Il gère un formulaire dynamique où les utilisateurs peuvent créer, modifier, supprimer et télécharger des CVs.</p>
+      <h4>Fonctionnalités Clés :</h4>
+      <ul style="padding-left:20px; line-height:1.7; margin-bottom:10px;">
+        <li><strong>Listes Dynamiques :</strong> L'utilisateur peut cliquer sur "Ajouter" pour générer de nouveaux champs texte (TextField) pour l'Éducation et l'Expérience. Le contrôleur crée dynamiquement ces éléments HBox en Java.</li>
+        <li><strong>Tags de Compétences :</strong> L'ajout d'une compétence génère un petit "tag" bleu avec un bouton X pour le supprimer.</li>
+        <li><strong>Validation de Formulaire :</strong> Vérifie la longueur du nom, le format de l'email (regex) et du numéro de téléphone avant la sauvegarde.</li>
+        <li><strong>Conversion de Données :</strong> Prend les listes visuelles dynamiques et les rassemble en de longues chaînes de caractères (séparées par <code>\n---\n</code>) pour les donner au <code>CvService</code>.</li>
+        <li><strong>Intégration IA :</strong> Possède un bouton qui envoie les données du formulaire actuel au <code>AiService</code> et demande à Gemini de suggérer des améliorations pour le CV.</li>
+        <li><strong>Export PDF :</strong> Ouvre une boîte de dialogue (FileChooser) pour laisser l'utilisateur choisir où sauvegarder le PDF, puis appelle <code>CvService.exportToPdf()</code>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- JobGuideController -->
+  <div class="class-card" id="jobguidectrl">
+    <div class="class-card-header">
+      <span class="layer-badge layer-controller">controller</span>
+      <h3>JobGuideController.java</h3>
+    </div>
+    <div class="class-card-body">
+      <p><strong>Écran :</strong> <code>JobGuide.fxml</code> (L'Assistant Carrière IA)</p>
+      <p>Une interface de chat propulsée par Gemini AI. Elle possède trois modes distincts :</p>
+      <ol style="padding-left:20px; line-height:1.7; margin-bottom:10px;">
+        <li><strong>Chat Standard :</strong> Agit comme un coach carrière généraliste.</li>
+        <li><strong>Pratique d'Entretien :</strong> Une boucle interactive. L'IA pose une question prédéfinie ("Parlez-moi de vous"). L'utilisateur tape une réponse. L'IA évalue la réponse, donne un retour et un exemple, et demande à l'utilisateur de réessayer. L'IA passe à la question suivante seulement si l'utilisateur tape "next".</li>
+        <li><strong>Conseil CV :</strong> Lit le premier CV de l'utilisateur en base de données et demande à l'IA de l'analyser.</li>
+        <li><strong>Job Matcher (Sans IA) :</strong> Un algorithme local qui prend les compétences du CV et vérifie si elles existent dans la description/exigences des offres d'emploi.</li>
+      </ol>
+      <p><em>Utilise le multithreading pour que l'interface ne gèle pas en attendant l'API Gemini.</em></p>
+    </div>
+  </div>
+
+  <!-- AdminController -->
+  <div class="class-card" id="adminctrl">
+    <div class="class-card-header">
+      <span class="layer-badge layer-controller">controller</span>
+      <h3>AdminController.java</h3>
+    </div>
+    <div class="class-card-body">
+      <p><strong>Écran :</strong> <code>AdminDashboard.fxml</code></p>
+      <p>Accessible uniquement aux utilisateurs avec le rôle <code>"admin"</code>. Gère tout le système :</p>
+      <ul style="padding-left:20px; line-height:1.7; margin-bottom:10px;">
+        <li><strong>Gestion des Utilisateurs :</strong> TableView de tous les utilisateurs. L'admin peut supprimer des comptes (sauf le sien).</li>
+        <li><strong>Gestion des Emplois :</strong> Formulaires CRUD (Créer, Lire, Mettre à jour, Supprimer) complets. Inclut une validation d'URL pour les liens externes.</li>
+        <li><strong>Graphiques :</strong> Utilise JavaFX <code>PieChart</code> pour montrer le ratio Admins/Utilisateurs normaux, et <code>BarChart</code> pour afficher le nombre d'offres par entreprise.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- JobController & InfoController -->
+  <div style="display:flex; gap:20px;">
+    <div class="class-card" style="flex:1;" id="jobctrl">
+      <div class="class-card-header">
+        <span class="layer-badge layer-controller">controller</span>
+        <h3>JobController.java</h3>
+      </div>
+      <div class="class-card-body">
+        <p><strong>Écran :</strong> <code>Job.fxml</code></p>
+        <p>Un contrôleur très simple (lecture seule) pour les utilisateurs normaux. Il charge toutes les offres d'emploi depuis <code>JobOfferDAO</code> dans une TableView pour pouvoir les parcourir.</p>
+      </div>
+    </div>
+    <div class="class-card" style="flex:1;" id="infoctrl">
+      <div class="class-card-header">
+        <span class="layer-badge layer-controller">controller</span>
+        <h3>InfoController.java</h3>
+      </div>
+      <div class="class-card-body">
+        <p><strong>Écrans :</strong> <code>features.fxml</code>, <code>how_it_works.fxml</code></p>
+        <p>Un contrôleur purement navigationnel utilisé par les pages d'information statiques. Ne contient que des méthodes <code>goToX()</code>.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 8: DATABASE SCHEMA -->
+<div class="section" id="database-schema">
+  <div class="section-header">
+    <h2>8. Schéma de la Base de Données</h2>
+    <p>Structure de la base SQLite (<code>cvcreator.db</code>)</p>
+  </div>
+  
+  <h4>Table : <code>users</code></h4>
+  <table class="db-table">
+    <tr><th>Colonne</th><th>Type</th><th>Notes</th></tr>
+    <tr><td><span class="pk">id</span></td><td>INTEGER</td><td>PRIMARY KEY AUTOINCREMENT</td></tr>
+    <tr><td>name</td><td>TEXT</td><td>NOT NULL</td></tr>
+    <tr><td>email</td><td>TEXT</td><td>UNIQUE NOT NULL</td></tr>
+    <tr><td>password</td><td>TEXT</td><td>NOT NULL</td></tr>
+    <tr><td>role</td><td>TEXT</td><td>DEFAULT 'user'</td></tr>
+  </table>
+
+  <h4>Table : <code>cvs</code></h4>
+  <table class="db-table">
+    <tr><th>Colonne</th><th>Type</th><th>Notes</th></tr>
+    <tr><td><span class="pk">id</span></td><td>INTEGER</td><td>PRIMARY KEY AUTOINCREMENT</td></tr>
+    <tr><td><span class="fk">user_id</span></td><td>INTEGER</td><td>FOREIGN KEY REFERENCES users(id)</td></tr>
+    <tr><td>full_name</td><td>TEXT</td><td></td></tr>
+    <tr><td>email</td><td>TEXT</td><td></td></tr>
+    <tr><td>phone</td><td>TEXT</td><td></td></tr>
+    <tr><td>address</td><td>TEXT</td><td></td></tr>
+    <tr><td>objective</td><td>TEXT</td><td></td></tr>
+    <tr><td>education</td><td>TEXT</td><td></td></tr>
+    <tr><td>experience</td><td>TEXT</td><td></td></tr>
+    <tr><td>skills</td><td>TEXT</td><td></td></tr>
+    <tr><td>languages</td><td>TEXT</td><td></td></tr>
+  </table>
+
+  <h4>Table : <code>jobs</code></h4>
+  <table class="db-table">
+    <tr><th>Colonne</th><th>Type</th><th>Notes</th></tr>
+    <tr><td><span class="pk">id</span></td><td>INTEGER</td><td>PRIMARY KEY AUTOINCREMENT</td></tr>
+    <tr><td>title</td><td>TEXT</td><td>NOT NULL</td></tr>
+    <tr><td>company</td><td>TEXT</td><td></td></tr>
+    <tr><td>location</td><td>TEXT</td><td></td></tr>
+    <tr><td>description</td><td>TEXT</td><td></td></tr>
+    <tr><td>requirements</td><td>TEXT</td><td></td></tr>
+    <tr><td>link</td><td>TEXT</td><td></td></tr>
+  </table>
+</div>
+
+<!-- SECTION 9: USER JOURNEY -->
+<div class="section" id="flow">
+  <div class="section-header">
+    <h2>9. Flux de l'Application et Parcours Utilisateur</h2>
+  </div>
+  <ol style="padding-left:20px; line-height:2; color:#333; font-size:15px;">
+    <li><strong>Lancement :</strong> Main.java s'assure que la base de données existe. Affiche la Page d'Accueil (Landing Page).</li>
+    <li><strong>Page d'Accueil :</strong> Affiche les statistiques et les emplois récents. L'utilisateur clique sur "Se connecter".</li>
+    <li><strong>Connexion :</strong> L'utilisateur se connecte. <code>AuthService</code> sauvegarde la session.
+      <ul style="padding-left:20px; margin-top:8px; margin-bottom:8px; list-style-type:circle;">
+        <li>Si Rôle == Admin ➔ Va vers le <strong>Tableau de Bord Admin</strong> (Gérer utilisateurs &amp; jobs).</li>
+        <li>Si Rôle == User ➔ Va vers le <strong>Tableau de Bord Utilisateur</strong>.</li>
+      </ul>
+    </li>
+    <li><strong>Tableau de Bord :</strong> Affiche les CVs récents et le taux de complétion du profil. L'utilisateur clique sur "Créer un CV".</li>
+    <li><strong>Éditeur de CV :</strong> L'utilisateur remplit les formulaires, ajoute des lignes dynamiques pour l'éducation/expérience, ajoute des tags pour les compétences.
+      <ul style="padding-left:20px; margin-top:8px; margin-bottom:8px; list-style-type:circle;">
+        <li><em>Action :</em> Clique sur <strong>AI Advice</strong> ➔ Gemini analyse les champs et donne des conseils.</li>
+        <li><em>Action :</em> Clique sur <strong>Save</strong> ➔ Sauvegarde dans la BD SQLite.</li>
+        <li><em>Action :</em> Clique sur <strong>Export PDF</strong> ➔ PDFBox génère un fichier PDF formaté.</li>
+      </ul>
+    </li>
+    <li><strong>Job Guide (Assistant Emploi) :</strong> L'utilisateur clique sur l'icône IA.
+      <ul style="padding-left:20px; margin-top:8px; margin-bottom:8px; list-style-type:circle;">
+        <li>Discute avec Gemini pour des conseils de carrière.</li>
+        <li>S'entraîne avec une boucle d'entretien interactive.</li>
+        <li>Obtient des correspondances avec les offres d'emploi internes basées sur les compétences de son CV.</li>
+      </ul>
+    </li>
+  </ol>
+</div>
+
+</body>
+</html>

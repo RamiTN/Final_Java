@@ -16,7 +16,7 @@
             <Label text="CVBuilder" styleClass="logo"/>
 
             <Button text="Dashboard" onAction="#goToDashboard" maxWidth="Infinity" styleClass="nav-btn, active"/>
-            <Button text="My CVs" onAction="#goToCv" maxWidth="Infinity" styleClass="nav-btn"/>
+            <Button text="Create CV" onAction="#goToCv" maxWidth="Infinity" styleClass="nav-btn"/>
             <Button text="Profile" onAction="#goToProfile" maxWidth="Infinity" styleClass="nav-btn"/>
             <Button text="Jobs" onAction="#goToJobs" maxWidth="Infinity" styleClass="nav-btn"/>
             <Button text="Job Guide" onAction="#goToJobGuide" maxWidth="Infinity" styleClass="nav-btn"/>
@@ -40,6 +40,10 @@
                     <Label fx:id="welcomeLabel" text="Welcome back" styleClass="title"/>
                     <Label text="Here's your dashboard overview" styleClass="subtitle"/>
                 </VBox>
+
+                <!-- NOTIFICATION BELL -->
+                <Button fx:id="notifBtn" text="🔔" onAction="#handleShowNotifications"
+                        styleClass="ghost-btn" style="-fx-font-size: 18;"/>
 
             </HBox>
 
@@ -69,24 +73,12 @@
             <!-- CONTENT AREA -->
             <HBox spacing="20" VBox.vgrow="ALWAYS">
 
-                <!-- QUICK ACTIONS -->
-                <VBox styleClass="panel" prefWidth="240" spacing="12">
-
-                    <Label text="Quick Actions" styleClass="panel-title"/>
-
-                    <Button text="+ Create CV" onAction="#goToCv" maxWidth="Infinity" styleClass="action-btn"/>
-                    <Button text="Browse Jobs" onAction="#goToJobs" maxWidth="Infinity" styleClass="action-btn"/>
-                    <Button text="Edit Profile" onAction="#goToProfile" maxWidth="Infinity" styleClass="action-btn"/>
-                    <Button text="Job Guide AI" onAction="#goToJobGuide" maxWidth="Infinity" styleClass="action-btn"/>
-
-                </VBox>
-
                 <!-- RECENT CVs (dynamic) -->
                 <VBox HBox.hgrow="ALWAYS" styleClass="panel">
 
-                    <HBox alignment="CENTER_LEFT">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
                         <Label text="Recent CVs" styleClass="panel-title" HBox.hgrow="ALWAYS"/>
-                        <Button text="+ New" onAction="#goToCv" styleClass="small-btn"/>
+
                     </HBox>
 
                     <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"

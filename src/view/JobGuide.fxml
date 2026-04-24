@@ -24,6 +24,9 @@
             <!-- HEADER -->
             <HBox alignment="CENTER_LEFT" spacing="12" styleClass="top-bar">
                 <Label text="Job Guide — AI Assistant" styleClass="page-title" HBox.hgrow="ALWAYS"/>
+                <Label text="Using CV:" styleClass="subtitle"/>
+                <ComboBox fx:id="cvCombo" promptText="— Select CV —" onAction="#handleCvChange"
+                          prefWidth="200" styleClass="combo-box"/>
             </HBox>
 
             <!-- MODE BUTTONS -->
@@ -31,13 +34,15 @@
                 <Button text="Interview Practice" onAction="#handleInterview" styleClass="accent-btn"/>
                 <Button text="CV Advice" onAction="#handleCvAdvice" styleClass="info-btn"/>
                 <Button text="Matching Jobs" onAction="#handleMatchingJobs" styleClass="success-btn"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="🔄 New Chat" onAction="#handleNewChat" styleClass="ghost-btn"/>
             </HBox>
 
             <!-- CHAT AREA -->
             <VBox VBox.vgrow="ALWAYS" styleClass="panel" spacing="12">
 
                 <TextArea fx:id="chatArea" editable="false" wrapText="true" VBox.vgrow="ALWAYS"
-                          promptText="Chat will appear here..." styleClass="chat-area"/>
+                          promptText="Select a CV above, then choose a mode to start..." styleClass="chat-area"/>
 
                 <HBox spacing="10">
                     <TextField fx:id="userInput" promptText="Type your message..." HBox.hgrow="ALWAYS"

@@ -6,6 +6,8 @@ public class User {
     private String email;
     private String password;
     private String role;
+    private String profilePicture;
+    private String bio;
 
     public User() {}
 
@@ -15,6 +17,16 @@ public class User {
         this.email = email;
         this.password = password;
         this.role = role;
+    }
+
+    public User(int id, String name, String email, String password, String role, String profilePicture) {
+        this(id, name, email, password, role);
+        this.profilePicture = profilePicture;
+    }
+
+    public User(int id, String name, String email, String password, String role, String profilePicture, String bio) {
+        this(id, name, email, password, role, profilePicture);
+        this.bio = bio;
     }
 
     public int getId() { return id; }
@@ -27,6 +39,10 @@ public class User {
     public void setPassword(String password) { this.password = password; }
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
+    public String getProfilePicture() { return profilePicture; }
+    public void setProfilePicture(String profilePicture) { this.profilePicture = profilePicture; }
+    public String getBio() { return bio; }
+    public void setBio(String bio) { this.bio = bio; }
     public boolean isAdmin() { return "admin".equals(role); }
 
     @Override

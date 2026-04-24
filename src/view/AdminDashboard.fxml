@@ -20,6 +20,8 @@
             <Button text="Dashboard" onAction="#goToDashboard" maxWidth="Infinity" styleClass="nav-btn, active"/>
             <Button text="Manage Users" onAction="#goToUsers" maxWidth="Infinity" styleClass="nav-btn"/>
             <Button text="Manage Jobs" onAction="#goToJobs" maxWidth="Infinity" styleClass="nav-btn"/>
+            <Button text="Applications" onAction="#goToApplications" maxWidth="Infinity" styleClass="nav-btn"/>
+            <Button text="Support" onAction="#goToSupport" maxWidth="Infinity" styleClass="nav-btn"/>
 
             <Region VBox.vgrow="ALWAYS"/>
 
@@ -58,6 +60,18 @@
                     <Label text="&#x1F4C4;" styleClass="stat-icon"/>
                     <Label fx:id="totalCvsLabel" text="0" styleClass="stat-number"/>
                     <Label text="Total CVs" styleClass="stat-label"/>
+                </VBox>
+
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="📨" styleClass="stat-icon"/>
+                    <Label fx:id="totalAppsLabel" text="0" styleClass="stat-number"/>
+                    <Label text="Pending Apps" styleClass="stat-label"/>
+                </VBox>
+
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="💬" styleClass="stat-icon"/>
+                    <Label fx:id="totalTicketsLabel" text="0" styleClass="stat-number"/>
+                    <Label text="Open Tickets" styleClass="stat-label"/>
                 </VBox>
             </HBox>
 
@@ -122,10 +136,6 @@
                                 <Label text="LOCATION" styleClass="form-label"/>
                                 <TextField fx:id="jobLocationField" promptText="Location" styleClass="form-field"/>
                             </VBox>
-                            <VBox HBox.hgrow="ALWAYS" spacing="4">
-                                <Label text="LINK" styleClass="form-label"/>
-                                <TextField fx:id="jobLinkField" promptText="Link" styleClass="form-field"/>
-                            </VBox>
                         </HBox>
 
                         <HBox spacing="10">
@@ -159,12 +169,42 @@
                                 <TableColumn text="Location" prefWidth="110">
                                     <cellValueFactory><PropertyValueFactory property="location"/></cellValueFactory>
                                 </TableColumn>
-                                <TableColumn text="Link" prefWidth="160">
-                                    <cellValueFactory><PropertyValueFactory property="link"/></cellValueFactory>
+                                <TableColumn text="Status" prefWidth="100">
+                                    <cellValueFactory><PropertyValueFactory property="status"/></cellValueFactory>
                                 </TableColumn>
                             </columns>
                         </TableView>
                         <Label fx:id="jobMsg" styleClass="message-label"/>
+                    </VBox>
+                </Tab>
+
+                <!-- APPLICATIONS TAB -->
+                <Tab text="Applications" closable="false">
+                    <VBox spacing="12" style="-fx-padding: 16;">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="Job Applications" styleClass="panel-title" HBox.hgrow="ALWAYS"/>
+                            <Button text="↻ Refresh" onAction="#refreshApplications" styleClass="small-btn"/>
+                        </HBox>
+                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                                    style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-pref-height: 400;">
+                            <VBox fx:id="applicationsContainer" spacing="10"/>
+                        </ScrollPane>
+                        <Label fx:id="appMsg" styleClass="message-label"/>
+                    </VBox>
+                </Tab>
+
+                <!-- SUPPORT TICKETS TAB -->
+                <Tab text="Support" closable="false">
+                    <VBox spacing="12" style="-fx-padding: 16;">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="Support Tickets" styleClass="panel-title" HBox.hgrow="ALWAYS"/>
+                            <Button text="↻ Refresh" onAction="#refreshTickets" styleClass="small-btn"/>
+                        </HBox>
+                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                                    style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-pref-height: 400;">
+                            <VBox fx:id="ticketsContainer" spacing="10"/>
+                        </ScrollPane>
+                        <Label fx:id="ticketMsg" styleClass="message-label"/>
                     </VBox>
                 </Tab>
 
