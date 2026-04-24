@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="rootPane" spacing="0" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.JobController"
+      stylesheets="@/css/style.css"
+      prefWidth="1000" prefHeight="650"
+      styleClass="root">
+
+    <HBox VBox.vgrow="ALWAYS">
+
+        <!-- SIDEBAR -->
+        <VBox styleClass="sidebar">
+            <Label text="CVBuilder" styleClass="logo"/>
+            <Button text="Dashboard" onAction="#goToDashboard" maxWidth="Infinity" styleClass="nav-btn"/>
+            <Button text="Jobs" maxWidth="Infinity" styleClass="nav-btn, active"/>
+            <Region VBox.vgrow="ALWAYS"/>
+        </VBox>
+
+        <!-- MAIN CONTENT -->
+        <VBox HBox.hgrow="ALWAYS" styleClass="main" spacing="16">
+
+            <!-- HEADER -->
+            <HBox alignment="CENTER_LEFT" spacing="12" styleClass="top-bar">
+                <Label text="Available Jobs" styleClass="page-title" HBox.hgrow="ALWAYS"/>
+
+                <!-- FILTER -->
+                <Label text="Filter:" styleClass="subtitle"/>
+                <ComboBox fx:id="filterCombo" promptText="All" prefWidth="140"
+                          onAction="#handleFilter" styleClass="combo-box"/>
+
+                <!-- CV SELECTOR -->
+                <Label text="Apply with:" styleClass="subtitle"/>
+                <ComboBox fx:id="cvCombo" promptText="— Select CV —" prefWidth="200" styleClass="combo-box"/>
+
+                <Button text="Back" onAction="#goToDashboard" styleClass="ghost-btn"/>
+            </HBox>
+
+            <!-- JOB CARDS -->
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                        style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                <VBox fx:id="jobCardsContainer" spacing="14"/>
+            </ScrollPane>
+
+        </VBox>
+
+    </HBox>
+
+</VBox>

@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="rootPane" spacing="0" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.AdminController"
+      stylesheets="@/css/style.css"
+      prefWidth="1000" prefHeight="650"
+      styleClass="root">
+
+    <HBox VBox.vgrow="ALWAYS">
+
+        <!-- ADMIN SIDEBAR -->
+        <VBox styleClass="sidebar">
+            <Label text="CVBuilder" styleClass="logo"/>
+            <Label text="ADMIN" style="-fx-text-fill: #8a92a6; -fx-font-size: 10; -fx-font-weight: bold; -fx-padding: 0 0 10 4;"/>
+
+            <Button text="Dashboard" onAction="#goToDashboard" maxWidth="Infinity" styleClass="nav-btn, active"/>
+            <Button text="Manage Users" onAction="#goToUsers" maxWidth="Infinity" styleClass="nav-btn"/>
+            <Button text="Manage Jobs" onAction="#goToJobs" maxWidth="Infinity" styleClass="nav-btn"/>
+            <Button text="Applications" onAction="#goToApplications" maxWidth="Infinity" styleClass="nav-btn"/>
+            <Button text="Support" onAction="#goToSupport" maxWidth="Infinity" styleClass="nav-btn"/>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <Separator/>
+            <Button text="Sign out" onAction="#handleLogout" maxWidth="Infinity" styleClass="logout-btn"/>
+        </VBox>
+
+        <!-- MAIN CONTENT -->
+        <ScrollPane HBox.hgrow="ALWAYS" fitToWidth="true"
+                    style="-fx-background-color: transparent; -fx-border-color: transparent;">
+        <VBox styleClass="main" spacing="18">
+
+            <!-- TOP BAR -->
+            <HBox alignment="CENTER_LEFT" spacing="14" styleClass="top-bar">
+                <VBox HBox.hgrow="ALWAYS" spacing="2">
+                    <Label fx:id="adminWelcomeLabel" text="Admin Dashboard" styleClass="title"/>
+                    <Label text="Platform overview and management" styleClass="subtitle"/>
+                </VBox>
+            </HBox>
+
+            <!-- STATS ROW -->
+            <HBox spacing="16">
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="&#x1F465;" styleClass="stat-icon"/>
+                    <Label fx:id="totalUsersLabel" text="0" styleClass="stat-number"/>
+                    <Label text="Total Users" styleClass="stat-label"/>
+                </VBox>
+
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="&#x1F4BC;" styleClass="stat-icon"/>
+                    <Label fx:id="totalJobsLabel" text="0" styleClass="stat-number"/>
+                    <Label text="Total Jobs" styleClass="stat-label"/>
+                </VBox>
+
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="&#x1F4C4;" styleClass="stat-icon"/>
+                    <Label fx:id="totalCvsLabel" text="0" styleClass="stat-number"/>
+                    <Label text="Total CVs" styleClass="stat-label"/>
+                </VBox>
+
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="📨" styleClass="stat-icon"/>
+                    <Label fx:id="totalAppsLabel" text="0" styleClass="stat-number"/>
+                    <Label text="Pending Apps" styleClass="stat-label"/>
+                </VBox>
+
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="💬" styleClass="stat-icon"/>
+                    <Label fx:id="totalTicketsLabel" text="0" styleClass="stat-number"/>
+                    <Label text="Open Tickets" styleClass="stat-label"/>
+                </VBox>
+            </HBox>
+
+            <!-- CHARTS ROW -->
+            <HBox spacing="18" VBox.vgrow="SOMETIMES">
+                <VBox styleClass="panel" HBox.hgrow="ALWAYS" spacing="8">
+                    <Label text="User Roles" styleClass="panel-title"/>
+                    <PieChart fx:id="rolesChart" prefHeight="200" legendSide="BOTTOM"/>
+                </VBox>
+
+                <VBox styleClass="panel" HBox.hgrow="ALWAYS" spacing="8">
+                    <Label text="Jobs by Company" styleClass="panel-title"/>
+                    <BarChart fx:id="jobsChart" prefHeight="200" legendVisible="false">
+                        <xAxis><CategoryAxis label="Company"/></xAxis>
+                        <yAxis><NumberAxis label="Count"/></yAxis>
+                    </BarChart>
+                </VBox>
+            </HBox>
+
+            <!-- MANAGEMENT TABS -->
+            <TabPane fx:id="adminTabPane" VBox.vgrow="ALWAYS">
+
+                <!-- USERS TAB -->
+                <Tab text="Users" closable="false">
+                    <VBox spacing="12" style="-fx-padding: 16;">
+                        <TableView fx:id="userTable" prefHeight="250">
+                            <columns>
+                                <TableColumn text="ID" prefWidth="50">
+                                    <cellValueFactory><PropertyValueFactory property="id"/></cellValueFactory>
+                                </TableColumn>
+                                <TableColumn text="Name" prefWidth="160">
+                                    <cellValueFactory><PropertyValueFactory property="name"/></cellValueFactory>
+                                </TableColumn>
+                                <TableColumn text="Email" prefWidth="220">
+                                    <cellValueFactory><PropertyValueFactory property="email"/></cellValueFactory>
+                                </TableColumn>
+                                <TableColumn text="Role" prefWidth="100">
+                                    <cellValueFactory><PropertyValueFactory property="role"/></cellValueFactory>
+                                </TableColumn>
+                            </columns>
+                        </TableView>
+                        <HBox spacing="10">
+                            <Button text="Delete Selected User" onAction="#handleDeleteUser" styleClass="danger-btn"/>
+                        </HBox>
+                        <Label fx:id="userMsg" styleClass="message-label"/>
+                    </VBox>
+                </Tab>
+
+                <!-- JOBS TAB -->
+                <Tab text="Jobs" closable="false">
+                    <VBox spacing="12" style="-fx-padding: 16;">
+                        <HBox spacing="10">
+                            <VBox HBox.hgrow="ALWAYS" spacing="4">
+                                <Label text="TITLE" styleClass="form-label"/>
+                                <TextField fx:id="jobTitleField" promptText="Title" styleClass="form-field"/>
+                            </VBox>
+                            <VBox HBox.hgrow="ALWAYS" spacing="4">
+                                <Label text="COMPANY" styleClass="form-label"/>
+                                <TextField fx:id="jobCompanyField" promptText="Company" styleClass="form-field"/>
+                            </VBox>
+                            <VBox HBox.hgrow="ALWAYS" spacing="4">
+                                <Label text="LOCATION" styleClass="form-label"/>
+                                <TextField fx:id="jobLocationField" promptText="Location" styleClass="form-field"/>
+                            </VBox>
+                        </HBox>
+
+                        <HBox spacing="10">
+                            <VBox HBox.hgrow="ALWAYS" spacing="4">
+                                <Label text="DESCRIPTION" styleClass="form-label"/>
+                                <TextField fx:id="jobDescField" promptText="Description" styleClass="form-field"/>
+                            </VBox>
+                            <VBox HBox.hgrow="ALWAYS" spacing="4">
+                                <Label text="REQUIREMENTS" styleClass="form-label"/>
+                                <TextField fx:id="jobReqField" promptText="Requirements" styleClass="form-field"/>
+                            </VBox>
+                        </HBox>
+
+                        <HBox spacing="10">
+                            <Button text="Add Job" onAction="#handleAddJob" styleClass="success-btn"/>
+                            <Button text="Update Job" onAction="#handleUpdateJob" styleClass="warning-btn"/>
+                            <Button text="Delete Job" onAction="#handleDeleteJob" styleClass="danger-btn"/>
+                        </HBox>
+
+                        <TableView fx:id="adminJobTable" prefHeight="200">
+                            <columns>
+                                <TableColumn text="ID" prefWidth="40">
+                                    <cellValueFactory><PropertyValueFactory property="id"/></cellValueFactory>
+                                </TableColumn>
+                                <TableColumn text="Title" prefWidth="150">
+                                    <cellValueFactory><PropertyValueFactory property="title"/></cellValueFactory>
+                                </TableColumn>
+                                <TableColumn text="Company" prefWidth="130">
+                                    <cellValueFactory><PropertyValueFactory property="company"/></cellValueFactory>
+                                </TableColumn>
+                                <TableColumn text="Location" prefWidth="110">
+                                    <cellValueFactory><PropertyValueFactory property="location"/></cellValueFactory>
+                                </TableColumn>
+                                <TableColumn text="Status" prefWidth="100">
+                                    <cellValueFactory><PropertyValueFactory property="status"/></cellValueFactory>
+                                </TableColumn>
+                            </columns>
+                        </TableView>
+                        <Label fx:id="jobMsg" styleClass="message-label"/>
+                    </VBox>
+                </Tab>
+
+                <!-- APPLICATIONS TAB -->
+                <Tab text="Applications" closable="false">
+                    <VBox spacing="12" style="-fx-padding: 16;">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="Job Applications" styleClass="panel-title" HBox.hgrow="ALWAYS"/>
+                            <Button text="↻ Refresh" onAction="#refreshApplications" styleClass="small-btn"/>
+                        </HBox>
+                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                                    style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-pref-height: 400;">
+                            <VBox fx:id="applicationsContainer" spacing="10"/>
+                        </ScrollPane>
+                        <Label fx:id="appMsg" styleClass="message-label"/>
+                    </VBox>
+                </Tab>
+
+                <!-- SUPPORT TICKETS TAB -->
+                <Tab text="Support" closable="false">
+                    <VBox spacing="12" style="-fx-padding: 16;">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <Label text="Support Tickets" styleClass="panel-title" HBox.hgrow="ALWAYS"/>
+                            <Button text="↻ Refresh" onAction="#refreshTickets" styleClass="small-btn"/>
+                        </HBox>
+                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                                    style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-pref-height: 400;">
+                            <VBox fx:id="ticketsContainer" spacing="10"/>
+                        </ScrollPane>
+                        <Label fx:id="ticketMsg" styleClass="message-label"/>
+                    </VBox>
+                </Tab>
+
+            </TabPane>
+
+        </VBox>
+        </ScrollPane>
+
+    </HBox>
+
+</VBox>

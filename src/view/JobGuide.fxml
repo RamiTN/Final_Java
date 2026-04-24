@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="rootPane" spacing="0" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.JobGuideController"
+      stylesheets="@/css/style.css"
+      prefWidth="1000" prefHeight="650"
+      styleClass="root">
+
+    <HBox VBox.vgrow="ALWAYS">
+
+        <!-- SIDEBAR -->
+        <VBox styleClass="sidebar">
+            <Label text="CVBuilder" styleClass="logo"/>
+            <Button text="Dashboard" onAction="#goToDashboard" maxWidth="Infinity" styleClass="nav-btn"/>
+            <Button text="Job Guide" maxWidth="Infinity" styleClass="nav-btn, active"/>
+            <Region VBox.vgrow="ALWAYS"/>
+        </VBox>
+
+        <!-- MAIN CONTENT -->
+        <VBox HBox.hgrow="ALWAYS" styleClass="main" spacing="16">
+
+            <!-- HEADER -->
+            <HBox alignment="CENTER_LEFT" spacing="12" styleClass="top-bar">
+                <Label text="Job Guide — AI Assistant" styleClass="page-title" HBox.hgrow="ALWAYS"/>
+                <Label text="Using CV:" styleClass="subtitle"/>
+                <ComboBox fx:id="cvCombo" promptText="— Select CV —" onAction="#handleCvChange"
+                          prefWidth="200" styleClass="combo-box"/>
+            </HBox>
+
+            <!-- MODE BUTTONS -->
+            <HBox spacing="10">
+                <Button text="Interview Practice" onAction="#handleInterview" styleClass="accent-btn"/>
+                <Button text="CV Advice" onAction="#handleCvAdvice" styleClass="info-btn"/>
+                <Button text="Matching Jobs" onAction="#handleMatchingJobs" styleClass="success-btn"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="🔄 New Chat" onAction="#handleNewChat" styleClass="ghost-btn"/>
+            </HBox>
+
+            <!-- CHAT AREA -->
+            <VBox VBox.vgrow="ALWAYS" styleClass="panel" spacing="12">
+
+                <TextArea fx:id="chatArea" editable="false" wrapText="true" VBox.vgrow="ALWAYS"
+                          promptText="Select a CV above, then choose a mode to start..." styleClass="chat-area"/>
+
+                <HBox spacing="10">
+                    <TextField fx:id="userInput" promptText="Type your message..." HBox.hgrow="ALWAYS"
+                               onAction="#handleSend" styleClass="chat-input"/>
+                    <Button text="Send" onAction="#handleSend" styleClass="chat-send-btn"/>
+                </HBox>
+
+            </VBox>
+
+        </VBox>
+
+    </HBox>
+
+</VBox>

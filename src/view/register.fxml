@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="rootPane" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.UserController"
+      stylesheets="@/css/style.css"
+      prefWidth="1000" prefHeight="650"
+      styleClass="auth-bg">
+
+    <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
+
+        <VBox styleClass="auth-card" alignment="CENTER" spacing="6">
+
+            <Label text="Create Account" styleClass="auth-title"/>
+            <Label text="Join CVBuilder today" styleClass="auth-subtitle"/>
+
+            <TextField fx:id="nameField" promptText="Full Name" styleClass="auth-field"/>
+            <TextField fx:id="regEmailField" promptText="Email" styleClass="auth-field"/>
+            <PasswordField fx:id="regPasswordField" promptText="Password" styleClass="auth-field"/>
+            <PasswordField fx:id="confirmPasswordField" promptText="Confirm Password" styleClass="auth-field"/>
+
+            <Button text="Register" onAction="#handleRegister" maxWidth="Infinity" styleClass="auth-btn"/>
+
+            <Label fx:id="messageLabel" styleClass="message-label"/>
+
+            <Hyperlink text="Already have an account? Login" onAction="#goToLogin" styleClass="auth-link"/>
+
+            <Hyperlink text="← Back to Home" onAction="#goToLanding" styleClass="auth-link"/>
+
+        </VBox>
+
+    </VBox>
+
+</VBox>

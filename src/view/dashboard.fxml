@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="rootPane" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.UserController"
+      stylesheets="@/css/style.css"
+      prefWidth="1000" prefHeight="650"
+      styleClass="root">
+
+    <HBox VBox.vgrow="ALWAYS">
+
+        <!-- SIDEBAR -->
+        <VBox styleClass="sidebar">
+
+            <Label text="CVBuilder" styleClass="logo"/>
+
+            <Button text="Dashboard" onAction="#goToDashboard" maxWidth="Infinity" styleClass="nav-btn, active"/>
+            <Button text="Create CV" onAction="#goToCv" maxWidth="Infinity" styleClass="nav-btn"/>
+            <Button text="Profile" onAction="#goToProfile" maxWidth="Infinity" styleClass="nav-btn"/>
+            <Button text="Jobs" onAction="#goToJobs" maxWidth="Infinity" styleClass="nav-btn"/>
+            <Button text="Job Guide" onAction="#goToJobGuide" maxWidth="Infinity" styleClass="nav-btn"/>
+            <Button fx:id="adminBtn" text="Admin Panel" onAction="#goToAdmin" maxWidth="Infinity"
+                    styleClass="nav-btn" visible="false" managed="false"/>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <Separator/>
+            <Button text="Sign out" onAction="#handleLogout" maxWidth="Infinity" styleClass="logout-btn"/>
+
+        </VBox>
+
+        <!-- MAIN CONTENT -->
+        <VBox HBox.hgrow="ALWAYS" styleClass="main">
+
+            <!-- TOP BAR -->
+            <HBox alignment="CENTER_LEFT" spacing="14" styleClass="top-bar">
+
+                <VBox HBox.hgrow="ALWAYS" spacing="2">
+                    <Label fx:id="welcomeLabel" text="Welcome back" styleClass="title"/>
+                    <Label text="Here's your dashboard overview" styleClass="subtitle"/>
+                </VBox>
+
+                <!-- NOTIFICATION BELL -->
+                <Button fx:id="notifBtn" text="🔔" onAction="#handleShowNotifications"
+                        styleClass="ghost-btn" style="-fx-font-size: 18;"/>
+
+            </HBox>
+
+            <!-- STATS ROW -->
+            <HBox spacing="16">
+
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="&#x1F4C4;" styleClass="stat-icon"/>
+                    <Label fx:id="cvCountLabel" text="0" styleClass="stat-number"/>
+                    <Label text="My CVs" styleClass="stat-label"/>
+                </VBox>
+
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="&#x1F4BC;" styleClass="stat-icon"/>
+                    <Label fx:id="jobCountLabel" text="0" styleClass="stat-number"/>
+                    <Label text="Jobs Available" styleClass="stat-label"/>
+                </VBox>
+
+                <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <Label text="&#x1F464;" styleClass="stat-icon"/>
+                    <Label fx:id="profilePercentLabel" text="0%" styleClass="stat-number"/>
+                    <Label text="Profile Complete" styleClass="stat-label"/>
+                </VBox>
+
+            </HBox>
+
+            <!-- CONTENT AREA -->
+            <HBox spacing="20" VBox.vgrow="ALWAYS">
+
+                <!-- RECENT CVs (dynamic) -->
+                <VBox HBox.hgrow="ALWAYS" styleClass="panel">
+
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="Recent CVs" styleClass="panel-title" HBox.hgrow="ALWAYS"/>
+
+                    </HBox>
+
+                    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                                style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                        <VBox fx:id="recentCvsContainer" spacing="10"/>
+                    </ScrollPane>
+
+                </VBox>
+
+            </HBox>
+
+        </VBox>
+
+    </HBox>
+
+</VBox>
